@@ -1,0 +1,11 @@
+{
+  "name": "pickle-mailer-ms",
+  "version": "1.0.0",
+  "description": "Highly available emailing microservice for Pickles Auctions technical take home assignment.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Melvin Liew",
+  "license": "ISC"
+}

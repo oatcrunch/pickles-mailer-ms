@@ -9,7 +9,8 @@
     "watch": "tsc -w",
     "test": "jest",
     "synth": "cdk synth",
-    "deploy": "cdk deploy"
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.111",

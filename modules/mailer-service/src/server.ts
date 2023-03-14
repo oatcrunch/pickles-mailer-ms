@@ -4,6 +4,8 @@ import * as multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { IUploadResult, uploadS3 } from './upload';
+import { publishMailSentEvent } from './publish-mail-sent';
+import { IEmail } from '../../mailer/src'
 
 dotEnv.config();
 const port = process.env.ENQUIRY_PORT || 3000;
@@ -43,26 +45,40 @@ app.post(
 
             if (!req.body.json) {
                 throw Error(
-                    'Body.json object is mandatory with "to", "subject", and "text" fields'
+                    'Body.json object is mandatory'
                 );
             }
 
-            const json = JSON.parse(req.body.json);
-            console.log(json);
+            const emailObj = <IEmail>JSON.parse(req.body.json);
+            console.log(emailObj);
+
+            if (!emailObj.to) {
+                throw Error('Body.json object required. See example: { to: "john.doe@email.com", subject: "Greetings", text: "Hello, how are you?" }.');
+            }
+
             let ret: IUploadResult = {
                 transactId: '',
                 etag: '',
             };
+            let eventId;
 
+            // 1. Upload to S3
             if (req.files) {
                 const file = req.files['file'];
                 ret = await uploadS3(file);
             }
+
+            // 2. Publish mail sent event
+            if (ret.transactId) {
+                eventId = await publishMailSentEvent(ret);
+            }
+
             res.status(201).send(
-                `Uploaded with transaction id: "${ret.transactId}" and etag: ${ret.etag}`
+                `Uploaded with transaction id: "${ret.transactId}", etag: ${ret.etag} & eventId: ${eventId}`
             );
         } catch (err) {
-            res.status(500).send(JSON.stringify(err));
+            console.error(err);
+            res.status(500).send(err?.message);
         }
     }
 );

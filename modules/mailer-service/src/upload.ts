@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface IUploadResult {
     transactId: string;
     etag: string;
+    // TODO: add sentDate => if not defined that means email sent failed
 }
 
 dotEnv.config();
@@ -25,13 +26,12 @@ const client = new S3Client({
 });
 
 export const uploadS3 = async (files: any[]): Promise<IUploadResult> => {
+    let res: IUploadResult = { transactId: '', etag: '' };
+    const transactId = uuidv4();
+    res.transactId = transactId;
+
     try {
-        let res: IUploadResult = { transactId: '', etag: '' };
-
         if (files) {
-            const transactId = uuidv4();
-            res.transactId = transactId;
-
             for (const f of files) {
                 const objId = uuidv4();
                 const mimeType = f.mimetype;

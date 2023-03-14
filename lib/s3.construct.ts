@@ -9,7 +9,7 @@ export interface IS3Props {
     // TODO: if needed
 }
 
-export class S3Construct extends Construct {
+export class PicklesS3Construct extends Construct {
     constructor(scope: Construct, id: string, props: IS3Props) {
         super(scope, id);
 

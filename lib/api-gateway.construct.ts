@@ -6,7 +6,7 @@ export interface IApiGatewayProps {
     processMailSubmissionFn: IFunction;
 }
 
-export class ApiGatewayConstruct extends Construct {
+export class PicklesApiGatewayConstruct extends Construct {
     public lambdaRestApi: LambdaRestApi;
 
     constructor(scope: Construct, id: string, props: IApiGatewayProps) {

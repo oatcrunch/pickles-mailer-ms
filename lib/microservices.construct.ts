@@ -13,7 +13,7 @@ export class MicroservicesConstruct extends Construct {
 
   constructor(scope: Construct, id: string, props: IMicroserviceProps) {
     super(scope, id);
-    this.processMailSubmissionFn = this.createEnquiryFn();
+    // this.processMailSubmissionFn = this.createEnquiryFn();
   }
 
   private createEnquiryFn(): NodejsFunction {

@@ -1,6 +1,7 @@
 import * as Nodemailer from 'nodemailer';
 import * as Mail from 'nodemailer/lib/mailer';
 import { google } from 'googleapis';
+import { IEmail } from './models';
 
 const OAuth2 = google.auth.OAuth2;
 
@@ -52,3 +53,5 @@ export const sendEmail = async (
         throw error;
     }
 };
+
+export { IEmail };

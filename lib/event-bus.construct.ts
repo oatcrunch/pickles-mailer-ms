@@ -25,8 +25,8 @@ export class PicklesEventBusConstruct extends Construct {
             enabled: true,
             description: 'When Mail is being sent to recipient',
             eventPattern: {
-                source: ['com.pickles.mail.sent'],
-                detailType: ['MailSent'],
+                source: [process.env.EVENT_SOURCE_NAME!],
+                detailType: [process.env.EVENT_DETAIL_TYPE!],
             },
             ruleName: 'PublishMailSentRule',
         });

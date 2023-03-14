@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface IUploadResult {
     transactId: string;
     etag: string;
+    sentDate?: string;
     // TODO: add sentDate => if not defined that means email sent failed
 }
 

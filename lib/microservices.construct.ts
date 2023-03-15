@@ -12,47 +12,52 @@ export interface IMicroserviceProps {
 }
 
 export class PicklesMicroservicesConstruct extends Construct {
-    public readonly processMailSubmissionFn: NodejsFunction;
-    public readonly persistDataFn: NodejsFunction;
+    public readonly handleEmailSentSuccessFn: NodejsFunction;
+    public readonly handleEmailSentFailedFn: NodejsFunction;
 
     constructor(scope: Construct, id: string, props: IMicroserviceProps) {
         super(scope, id);
-        // this.processMailSubmissionFn = this.createEnquiryFn();
-        this.persistDataFn = this.createPersistDataFn();
+        this.handleEmailSentSuccessFn = this.createHandleEmailSentSuccessFn();
+        this.handleEmailSentFailedFn = this.createHandleEmailSentFailedFn();
     }
 
-    private createEnquiryFn(): NodejsFunction {
-        const sendReqFn = new NodejsFunction(this, 'ProcessMailSubmissionFn', {
-            memorySize: 256,
-            timeout: cdk.Duration.seconds(180),
-            runtime: lambda.Runtime.NODEJS_16_X,
-            handler: 'main',
-            entry: join(__dirname, '/../functions/process-mail-req.ts'),
-            bundling: {
-                minify: true,
-                externalModules: ['aws-sdk'],
-            },
-        });
-        return sendReqFn;
-    }
-
-    private createPersistDataFn(): NodejsFunction {
-        const persistDataFn = new NodejsFunction(
+    private createHandleEmailSentSuccessFn(): NodejsFunction {
+        const fn = new NodejsFunction(
             this,
-            process.env.PERSIST_DATA_FN!,
+            process.env.HANDLE_EMAIL_SENT_SUCCESS_FN!,
             {
-                functionName: process.env.PERSIST_DATA_FN,
+                functionName: process.env.HANDLE_EMAIL_SENT_SUCCESS_FN,
                 memorySize: 256,
                 timeout: cdk.Duration.seconds(180),
                 runtime: lambda.Runtime.NODEJS_16_X,
                 handler: 'main',
-                entry: join(__dirname, '/../functions/persist-data.ts'),
+                entry: join(__dirname, '/../functions/handle-email-success.ts'),
                 bundling: {
                     minify: true,
                     externalModules: ['aws-sdk'],
                 },
             }
         );
-        return persistDataFn;
+        return fn;
+    }
+
+    private createHandleEmailSentFailedFn(): NodejsFunction {
+        const fn = new NodejsFunction(
+            this,
+            process.env.HANDLE_EMAIL_SENT_FAILED_FN!,
+            {
+                functionName: process.env.HANDLE_EMAIL_SENT_FAILED_FN,
+                memorySize: 256,
+                timeout: cdk.Duration.seconds(180),
+                runtime: lambda.Runtime.NODEJS_16_X,
+                handler: 'main',
+                entry: join(__dirname, '/../functions/handle-email-failed.ts'),
+                bundling: {
+                    minify: true,
+                    externalModules: ['aws-sdk'],
+                },
+            }
+        );
+        return fn;
     }
 }

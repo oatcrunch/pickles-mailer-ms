@@ -8,28 +8,43 @@ import { Construct } from 'constructs';
 dotEnv.config();
 
 interface SqsQueueProps {
-    consumer: IFunction;
+    emailSentSuccessConsumer: IFunction;
+    emailSentFailedConsumer: IFunction;
 }
 
 export class PicklesSqsConstruct extends Construct {
-    public readonly dataPersistenceQueue: IQueue;
+    public readonly emailSentSuccessQueue: IQueue;
+    public readonly emailSentFailedQueue: IQueue;
 
     constructor(scope: Construct, id: string, props: SqsQueueProps) {
         super(scope, id);
 
-        this.dataPersistenceQueue = new Queue(
+        this.emailSentSuccessQueue = new Queue(
             this,
-            process.env.DATA_PERSISTENCE_SQS_NAME!,
+            process.env.EMAIL_SENT_SUCCCESS_QUEUE_NAME!,
             {
-                queueName: process.env.DATA_PERSISTENCE_SQS_NAME,
+                queueName: process.env.EMAIL_SENT_SUCCCESS_QUEUE_NAME,
                 visibilityTimeout: Duration.seconds(180),
             }
         );
 
-        props.consumer.addEventSource(
-            new SqsEventSource(this.dataPersistenceQueue, {
+        this.emailSentFailedQueue = new Queue(
+            this,
+            process.env.EVENT_SENT_FAILED_QUEUE_NAME!,
+            {
+                queueName: process.env.EVENT_SENT_FAILED_QUEUE_NAME,
+                visibilityTimeout: Duration.seconds(180),
+            }
+        );
+
+        props.emailSentSuccessConsumer.addEventSource(
+            new SqsEventSource(this.emailSentSuccessQueue, {
                 batchSize: 1,
             })
+        );
+
+        props.emailSentFailedConsumer.addEventSource(
+            new SqsEventSource(this.emailSentFailedQueue, { batchSize: 1 })
         );
     }
 }

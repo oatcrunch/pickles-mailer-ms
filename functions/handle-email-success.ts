@@ -7,11 +7,11 @@ export const main = async (
     console.log('event 👉', event);
     try {
         const apiGatewayEvent = <APIGatewayEvent>event;
-        processBody(<string>apiGatewayEvent.body);
+        await processBody(<string>apiGatewayEvent.body);
         throw new Error(`Error sending enquiry with event: ${event}`);
     } catch (err: any) {
         console.error(
-            `Exception thrown at function enquiry/index.main: ${err}`
+            `Exception thrown at function handle-email-success.main: ${err}`
         );
         return {
             statusCode: 500,
@@ -28,7 +28,7 @@ const processBody = async (body: string) => {
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: `Persist data function triggered with body: ${JSON.stringify(
+            message: `Handle email success function triggered with body: ${JSON.stringify(
                 body
             )}`,
         }),

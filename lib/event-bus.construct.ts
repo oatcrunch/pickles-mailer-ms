@@ -9,7 +9,8 @@ dotEnv.config();
 
 interface PicklesEventBusProps {
     // publisherFunction: IFunction;
-    targetQueue: IQueue;
+    emailSentSuccessQueue: IQueue;
+    emailSentFailedQueue: IQueue;
 }
 
 export class PicklesEventBusConstruct extends Construct {
@@ -20,18 +21,30 @@ export class PicklesEventBusConstruct extends Construct {
             eventBusName: process.env.EVENT_BUS_NAME,
         });
 
-        const publishMailSentRule = new Rule(this, 'PublishMailSentRule', {
+        const publishMailSentSuccessRule = new Rule(this, 'PublishMailSentSuccessRule', {
             eventBus: bus,
             enabled: true,
             description: 'When Mail is being sent to recipient',
             eventPattern: {
-                source: [process.env.EVENT_SOURCE_NAME!],
-                detailType: [process.env.EVENT_DETAIL_TYPE!],
+                source: [process.env.EMAIL_EVENT_SOURCE_NAME!],
+                detailType: [process.env.EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE!],
             },
-            ruleName: 'PublishMailSentRule',
+            ruleName: 'PublishMailSentSuccessRule',
         });
 
-        publishMailSentRule.addTarget(new SqsQueue(props.targetQueue));
+        const publishMailSentFailedRule = new Rule(this, 'PublishMailSentFailedRule', {
+            eventBus: bus,
+            enabled: true,
+            description: 'When Mail is not sent successfully to recipient',
+            eventPattern: {
+                source: [process.env.EMAIL_EVENT_SOURCE_NAME!],
+                detailType: [process.env.EVENT_SENT_FAILED_EVENT_DETAIL_TYPE!]
+            },
+            ruleName: 'PublishMailSentFailedRule'
+        })
+
+        publishMailSentSuccessRule.addTarget(new SqsQueue(props.emailSentSuccessQueue));
+        publishMailSentFailedRule.addTarget(new SqsQueue(props.emailSentFailedQueue));
 
         // grant publisher to PUT events to event bus
         // bus.grantPutEventsTo(props.publisherFunction); // prevent AccessDeniedException

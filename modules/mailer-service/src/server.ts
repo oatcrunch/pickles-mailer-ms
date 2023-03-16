@@ -1,14 +1,15 @@
-import * as express from 'express';
-import * as dotEnv from 'dotenv';
-import * as multer from 'multer';
+import express from 'express';
+import dotEnv from 'dotenv';
+import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { uploadS3 } from './helpers/upload/upload-utils';
-import { IEmailDeliveryOAuth2Config, sendEmail } from '../../mailer/src';
 import { validateEmailDto } from './helpers/mail/mail-utils';
 import { publishMailSentSuccessfulEvent } from './helpers/event/publish-mail-sent-successful';
 import { publishMailSentFailedEvent } from './helpers/event/publish-mail-sent-failed';
 import { createAttachmentsObj } from './helpers/mail/attachment-utils';
+import { IEmailDeliveryOAuth2Config } from './models/credentials';
+import { sendEmail } from './helpers/mail/transport-utils';
 
 dotEnv.config();
 
@@ -21,10 +22,10 @@ const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
 
 // Generate OAuth2 config for email transporter
 const oAuth2Config: IEmailDeliveryOAuth2Config = {
-    email: EMAIL,
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-    refreshToken: REFRESH_TOKEN,
+    email: EMAIL!,
+    clientId: CLIENT_ID!,
+    clientSecret: CLIENT_SECRET!,
+    refreshToken: REFRESH_TOKEN!,
 };
 
 // Initializations
@@ -59,7 +60,8 @@ app.post(
                 );
             }
             console.log('POST /email: body', req.body);
-            console.log('POST /email: files', req.files? req.files['file'] : undefined);
+            const files: any = req.files;
+            console.log('POST /email: files', files? files['file'] : undefined);
 
             if (!req.body.json) {
                 throw Error('Body.json object is mandatory');
@@ -67,6 +69,7 @@ app.post(
 
             const parsedJson = JSON.parse(req.body.json);
 
+            // Ensure integrity of the email data before processing happens
             if (!validateEmailDto(parsedJson)) {
                 throw Error(
                     'Body.json object required. See example: { to: "john.doe@email.com", subject: "Greetings", text: "Hello, how are you?" }.'
@@ -75,7 +78,7 @@ app.post(
 
             // 0. Extracting email attachments if any
             const attachments = createAttachmentsObj(
-                req.files ? req.files['file'] : []
+                files ? files['file'] : []
             );
 
             // 1. Send email with attachments if any
@@ -95,7 +98,8 @@ app.post(
                     emailTransactionId: emailReceipt.transactionId,
                     uploadTransactionId: uploadToS3Receipt.transactionId,
                     successfulDelivery: true,
-                    creationDate: new Date()
+                    creationDate: new Date(),
+                    emailData: parsedJson
                 });
                 console.log('publishMailSuccessfulReceipt', publishMailSuccessfulReceipt);
                 res.status(201).send(publishMailSuccessfulReceipt);
@@ -107,28 +111,13 @@ app.post(
                 emailTransactionId: emailReceipt.transactionId,
                 uploadTransactionId: uploadToS3Receipt.transactionId,
                 successfulDelivery: false,
-                creationDate: new Date()
+                creationDate: new Date(),
+                emailData: parsedJson
             });
+
             console.log('publishMailFailedReceipt', publishMailFailedReceipt);
             res.status(200).send(publishMailFailedReceipt);
-
-            // 1. Upload attachments to S3
-            // if (req.files) {
-            //     const file = req.files['file'];
-            //     ret = await uploadS3(file);
-            // }
-
-            // // 2. Send email
-            // const receipt = await sendEmail(emailObj);
-            // if (typeof receipt === 'string') {
-            //     // 3.a Publish mail sent success
-            //     if (ret.transactId) {
-            //         eventId = await publishMailSentEvent(ret);
-            //     }
-            // } else {
-            //     // 3.b Publish mail sent failure
-            // }
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
             res.status(500).send(err?.message);
         }
@@ -136,6 +125,6 @@ app.post(
 );
 
 app.listen(PORT, () => {
-    // console.log('process.env', process.env); // enable only for debugging
+    console.log('env', process.env);
     console.log(`Server listening on port ${PORT}`);
 });

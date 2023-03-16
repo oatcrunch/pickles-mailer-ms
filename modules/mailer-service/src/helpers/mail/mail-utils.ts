@@ -1,4 +1,4 @@
-import { IEmail } from '../../../../mailer/src/models';
+import { IEmail } from "../../models/email";
 
 export const validateEmailDto = (obj: any): boolean => {
     const parsedObj = obj as IEmail;

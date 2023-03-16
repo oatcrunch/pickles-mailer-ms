@@ -37,6 +37,8 @@ export class PickleMailerMsStack extends cdk.Stack {
             emailSentSuccessQueue: queue.emailSentSuccessQueue,
             emailSentFailedQueue: queue.emailSentFailedQueue,
             emailRetriesQueue: queue.emailRetriesQueue,
+            emailRetryPublisher: microservices.handleEmailRetriesFn,
+            emailSentFailedPublisher: microservices.handleEmailSentFailedFn
         });
     }
 }

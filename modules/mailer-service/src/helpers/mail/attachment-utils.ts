@@ -1,6 +1,6 @@
 import * as mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
-import { IAttachmentInfo } from '../../../../mailer/src';
+import { IAttachmentInfo } from '../../models/email';
 
 export const createAttachmentsObj = (files: any[]): IAttachmentInfo[] => {
     const results: IAttachmentInfo[] = [];
@@ -24,6 +24,7 @@ export const createAttachmentsObj = (files: any[]): IAttachmentInfo[] => {
         return results;
     } catch (err) {
         console.error('Exception caught in uploadS3', err);
-        throw err;
+        // throw err;
     }
+    return results;
 };

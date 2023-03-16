@@ -12,7 +12,8 @@
         "deploy": "cdk deploy",
         "destroy": "cdk destroy",
         "scan": "npx prettier --check \"bin/**/*.ts\" \"lib/**/*.ts\" \"test/**/*.ts\" \"modules/**/*.ts\"",
-        "fix": "npx prettier --write ."
+        "fix": "npx prettier --write .",
+        "postinstall": "cd modules/mailer-service && npm i"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.111",

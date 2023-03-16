@@ -1,7 +1,7 @@
 import * as dotEnv from 'dotenv';
 import { PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
-import { IMailSubmitted } from '../../../../mailer/src/models';
 import { ebClient } from './event-publisher';
+import { IMailSubmitted } from '../../entities/mail';
 
 dotEnv.config();
 
@@ -26,7 +26,7 @@ export const publishMailSentSuccessfulEvent = async (payload: IMailSubmitted): P
         console.log('Success, event sent: ', ret);
         const requestId = ret['$metadata'].requestId;
 
-        return requestId;
+        return <string>requestId;
     } catch (e) {
         console.error(e);
         throw e;

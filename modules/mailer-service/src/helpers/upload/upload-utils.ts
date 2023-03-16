@@ -1,7 +1,8 @@
 import * as dotEnv from 'dotenv';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
-import { IAttachmentInfo, IUploadTransaction } from '../../../../mailer/src';
+import { IAttachmentInfo } from '../../models/email';
+import { IUploadTransaction } from '../../models/transaction';
 
 dotEnv.config();
 
@@ -14,8 +15,8 @@ const SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const client = new S3Client({
     region: REGION,
     credentials: {
-        accessKeyId: ACCESS_KEY_ID,
-        secretAccessKey: SECRET_ACCESS_KEY,
+        accessKeyId: ACCESS_KEY_ID!,
+        secretAccessKey: SECRET_ACCESS_KEY!,
     },
 });
 
@@ -44,6 +45,7 @@ export const uploadS3 = async (
         return uploadTransaction;
     } catch (err) {
         console.error('Exception caught in uploadS3', err);
-        throw err;
+        // throw err;
     }
+    return uploadTransaction;
 };

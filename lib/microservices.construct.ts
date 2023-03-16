@@ -79,6 +79,14 @@ export class PicklesMicroservicesConstruct extends Construct {
                     minify: true,
                     externalModules: ['aws-sdk'],
                 },
+                environment: {
+                    PRIMARY_KEY: 'id',
+                    SORT_KEY: 'emailTransactionId',
+                    MAIL_TRAIL_TABLE_NAME: dbTable.tableName,
+                    EMAIL_EVENT_SOURCE_NAME: process.env.EMAIL_EVENT_SOURCE_NAME!,
+                    EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE: process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
+                    EVENT_BUS_NAME: process.env.EVENT_BUS_NAME!
+                },
             }
         );
         dbTable.grantWriteData(fn);
@@ -100,6 +108,11 @@ export class PicklesMicroservicesConstruct extends Construct {
                     minify: true,
                     externalModules: ['aws-sdk'],
                 },
+                environment: {
+                    EMAIL_EVENT_SOURCE_NAME: process.env.EMAIL_EVENT_SOURCE_NAME!,
+                    EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE: process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
+                    EVENT_BUS_NAME: process.env.EVENT_BUS_NAME!
+                }
             }
         );
         dbTable.grantWriteData(fn);

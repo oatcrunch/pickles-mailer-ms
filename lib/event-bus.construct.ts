@@ -1,14 +1,15 @@
 import * as dotEnv from 'dotenv';
-// import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SqsQueue } from 'aws-cdk-lib/aws-events-targets';
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
+import { IFunction } from 'aws-cdk-lib/aws-lambda';
 
 dotEnv.config();
 
 interface PicklesEventBusProps {
-    // publisherFunction: IFunction;
+    emailRetryPublisher: IFunction;
+    emailSentFailedPublisher: IFunction,
     emailSentSuccessQueue: IQueue;
     emailSentFailedQueue: IQueue;
     emailRetriesQueue: IQueue;
@@ -82,6 +83,7 @@ export class PicklesEventBusConstruct extends Construct {
         );
 
         // grant publisher to PUT events to event bus
-        // bus.grantPutEventsTo(props.publisherFunction); // prevent AccessDeniedException
+        bus.grantPutEventsTo(props.emailRetryPublisher); // prevent AccessDeniedException
+        bus.grantPutEventsTo(props.emailSentFailedPublisher);
     }
 }

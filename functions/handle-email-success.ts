@@ -9,7 +9,7 @@ import {
     SQSEvent,
 } from 'aws-lambda';
 import { ddbClient } from '../data-access/db-client';
-import { IMailSubmitted, IMailTrailEntity } from '../modules/mailer/src/models';
+import { IMailSubmitted, IMailTrailEntity } from '../modules/mailer-service/src/entities/mail';
 
 dotEnv.config();
 
@@ -74,7 +74,7 @@ const persistData = async (data: IMailSubmitted): Promise<boolean> => {
         };
 
         const createResult = await ddbClient.send(new PutItemCommand(params));
-        console.log(`persistData - createResult: "${createResult}"`);
+        console.log(`persistData - createResult: "${JSON.stringify(createResult)}"`);
         return true;
     } catch (err) {
         console.error(err);

@@ -13,6 +13,7 @@ import {
     IMailSubmitted,
     IMailTrailEntity,
 } from '../modules/mailer-service/src/entities/mail';
+import { MAIL_TRAIL_TABLE_NAME } from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -70,7 +71,7 @@ const persistData = async (data: IMailSubmitted): Promise<boolean> => {
 
     try {
         const params = {
-            TableName: process.env.MAIL_TRAIL_TABLE_NAME,
+            TableName: MAIL_TRAIL_TABLE_NAME,
             Item: marshall(rowData || {}),
         };
 

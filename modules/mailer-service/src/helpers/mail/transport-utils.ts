@@ -1,5 +1,5 @@
-import * as Nodemailer from 'nodemailer';
-import * as Mail from 'nodemailer/lib/mailer';
+import Nodemailer from 'nodemailer';
+import Mail from 'nodemailer/lib/mailer';
 import { v4 as uuidv4 } from 'uuid';
 import { google } from 'googleapis';
 import { IEmailDeliveryOAuth2Config } from '../../models/credentials';

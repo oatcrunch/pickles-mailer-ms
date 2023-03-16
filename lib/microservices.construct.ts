@@ -5,6 +5,7 @@ import { join } from 'path';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import { ITable } from 'aws-cdk-lib/aws-dynamodb';
+import { EMAIL_EVENT_SOURCE_NAME, EVENT_BUS_NAME, EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE, HANDLE_EMAIL_RETRIES_FN, HANDLE_EMAIL_SENT_FAILED_FN, HANDLE_EMAIL_SENT_SUCCESS_FN } from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -41,9 +42,9 @@ export class PicklesMicroservicesConstruct extends Construct {
     private createHandleEmailSentSuccessFn(dbTable: ITable): NodejsFunction {
         const fn = new NodejsFunction(
             this,
-            process.env.HANDLE_EMAIL_SENT_SUCCESS_FN!,
+            HANDLE_EMAIL_SENT_SUCCESS_FN!,
             {
-                functionName: process.env.HANDLE_EMAIL_SENT_SUCCESS_FN,
+                functionName: HANDLE_EMAIL_SENT_SUCCESS_FN,
                 memorySize: HANDLE_EMAIL_SUCCESS_MEMORY_GB,
                 timeout: cdk.Duration.seconds(HANDLE_EMAIL_SUCCESS_TIMEOUT),
                 runtime: lambda.Runtime.NODEJS_16_X,
@@ -67,9 +68,9 @@ export class PicklesMicroservicesConstruct extends Construct {
     private createHandleEmailSentFailedFn(dbTable: ITable): NodejsFunction {
         const fn = new NodejsFunction(
             this,
-            process.env.HANDLE_EMAIL_SENT_FAILED_FN!,
+            HANDLE_EMAIL_SENT_FAILED_FN!,
             {
-                functionName: process.env.HANDLE_EMAIL_SENT_FAILED_FN,
+                functionName: HANDLE_EMAIL_SENT_FAILED_FN,
                 memorySize: HANDLE_EMAIL_FAILED_MEMORY_GB,
                 timeout: cdk.Duration.seconds(HANDLE_EMAIL_FAILED_TIMEOUT),
                 runtime: lambda.Runtime.NODEJS_16_X,
@@ -83,11 +84,10 @@ export class PicklesMicroservicesConstruct extends Construct {
                     PRIMARY_KEY: 'id',
                     SORT_KEY: 'emailTransactionId',
                     MAIL_TRAIL_TABLE_NAME: dbTable.tableName,
-                    EMAIL_EVENT_SOURCE_NAME:
-                        process.env.EMAIL_EVENT_SOURCE_NAME!,
+                    EMAIL_EVENT_SOURCE_NAME,
                     EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE:
-                        process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
-                    EVENT_BUS_NAME: process.env.EVENT_BUS_NAME!,
+                        EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
+                    EVENT_BUS_NAME: EVENT_BUS_NAME!,
                 },
             }
         );
@@ -98,9 +98,9 @@ export class PicklesMicroservicesConstruct extends Construct {
     private createHandleEmailRetriesFn(dbTable: ITable): NodejsFunction {
         const fn = new NodejsFunction(
             this,
-            process.env.HANDLE_EMAIL_RETRIES_FN!,
+            HANDLE_EMAIL_RETRIES_FN!,
             {
-                functionName: process.env.HANDLE_EMAIL_RETRIES_FN,
+                functionName: HANDLE_EMAIL_RETRIES_FN,
                 memorySize: HANDLE_EMAIL_RETRIES_MEMORY_GB,
                 timeout: cdk.Duration.seconds(HANDLE_EMAIL_RETRIES_TIMEOUT),
                 runtime: lambda.Runtime.NODEJS_16_X,
@@ -111,11 +111,10 @@ export class PicklesMicroservicesConstruct extends Construct {
                     externalModules: ['aws-sdk'],
                 },
                 environment: {
-                    EMAIL_EVENT_SOURCE_NAME:
-                        process.env.EMAIL_EVENT_SOURCE_NAME!,
+                    EMAIL_EVENT_SOURCE_NAME,
                     EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE:
-                        process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
-                    EVENT_BUS_NAME: process.env.EVENT_BUS_NAME!,
+                        EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
+                    EVENT_BUS_NAME: EVENT_BUS_NAME!,
                 },
             }
         );

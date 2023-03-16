@@ -13,7 +13,7 @@ import {
     IMailSubmitted,
     IMailTrailEntity,
 } from '../modules/mailer-service/src/entities/mail';
-import { publishMailRetryEvent } from '../modules/mailer-service';
+import { MAIL_TRAIL_TABLE_NAME, publishMailRetryEvent } from '../modules/mailer-service';
 import { delay } from '../modules/mailer-service/src/helpers/generic/utils';
 import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
 
@@ -83,7 +83,7 @@ const persistData = async (data: IMailSubmitted): Promise<boolean> => {
 
     try {
         const params = {
-            TableName: process.env.MAIL_TRAIL_TABLE_NAME,
+            TableName: MAIL_TRAIL_TABLE_NAME,
             Item: marshall(rowData || {}),
         };
 

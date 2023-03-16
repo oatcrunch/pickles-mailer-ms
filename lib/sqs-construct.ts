@@ -4,6 +4,7 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { IQueue, Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
+import { EMAIL_SENT_SUCCCESS_QUEUE_NAME, EVENT_SENT_FAILED_QUEUE_NAME, EVENT_SENT_RETRIES_QUEUE_NAME } from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -31,9 +32,9 @@ export class PicklesSqsConstruct extends Construct {
 
         this.emailSentSuccessQueue = new Queue(
             this,
-            process.env.EMAIL_SENT_SUCCCESS_QUEUE_NAME!,
+            EMAIL_SENT_SUCCCESS_QUEUE_NAME!,
             {
-                queueName: process.env.EMAIL_SENT_SUCCCESS_QUEUE_NAME,
+                queueName: EMAIL_SENT_SUCCCESS_QUEUE_NAME,
                 visibilityTimeout: Duration.seconds(
                     EMAIL_SENT_SUCCESS_QUEUE_TIMEOUT
                 ),
@@ -41,9 +42,9 @@ export class PicklesSqsConstruct extends Construct {
         );
         this.emailSentFailedQueue = new Queue(
             this,
-            process.env.EVENT_SENT_FAILED_QUEUE_NAME!,
+            EVENT_SENT_FAILED_QUEUE_NAME!,
             {
-                queueName: process.env.EVENT_SENT_FAILED_QUEUE_NAME,
+                queueName: EVENT_SENT_FAILED_QUEUE_NAME,
                 visibilityTimeout: Duration.seconds(
                     EMAIL_SENT_FAILED_QUEUE_TIMEOUT
                 ),
@@ -51,9 +52,9 @@ export class PicklesSqsConstruct extends Construct {
         );
         this.emailRetriesQueue = new Queue(
             this,
-            process.env.EVENT_SENT_RETRIES_QUEUE_NAME!,
+            EVENT_SENT_RETRIES_QUEUE_NAME!,
             {
-                queueName: process.env.EVENT_SENT_RETRIES_QUEUE_NAME,
+                queueName: EVENT_SENT_RETRIES_QUEUE_NAME,
                 visibilityTimeout: Duration.seconds(
                     EMAIL_RETRIES_QUEUE_TIMEOUT
                 ),

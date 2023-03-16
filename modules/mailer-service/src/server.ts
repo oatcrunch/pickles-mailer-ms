@@ -14,7 +14,7 @@ import { sendEmail } from './helpers/mail/transport-utils';
 dotEnv.config();
 
 // Populate env vars here
-const PORT = process.env.ENQUIRY_PORT || 3000;
+const PORT = process.env.EMAIL_PORT || 3000;
 const EMAIL = process.env.EMAIL_ADDRESS;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;

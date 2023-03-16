@@ -7,6 +7,7 @@ import {
     Table,
 } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
+import { MAIL_TRAIL_TABLE_NAME } from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -20,7 +21,7 @@ export class PicklesDynamoDbConstruct extends Construct {
     }
 
     private createMailTrailTable(): ITable {
-        return new Table(this, process.env.MAIL_TRAIL_TABLE_NAME!, {
+        return new Table(this, MAIL_TRAIL_TABLE_NAME!, {
             partitionKey: {
                 name: 'id',
                 type: AttributeType.STRING,
@@ -29,7 +30,7 @@ export class PicklesDynamoDbConstruct extends Construct {
                 name: 'emailTransactionId',
                 type: AttributeType.STRING,
             },
-            tableName: process.env.MAIL_TRAIL_TABLE_NAME,
+            tableName: MAIL_TRAIL_TABLE_NAME,
             removalPolicy: RemovalPolicy.DESTROY,
             billingMode: BillingMode.PAY_PER_REQUEST,
         });

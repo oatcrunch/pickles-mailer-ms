@@ -4,6 +4,7 @@ import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SqsQueue } from 'aws-cdk-lib/aws-events-targets';
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
+import { EMAIL_EVENT_SOURCE_NAME, EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE, EVENT_BUS_NAME, EVENT_SENT_FAILED_EVENT_DETAIL_TYPE, EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE } from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -19,8 +20,8 @@ export class PicklesEventBusConstruct extends Construct {
     constructor(scope: Construct, id: string, props: PicklesEventBusProps) {
         super(scope, id);
 
-        const bus = new EventBus(this, process.env.EVENT_BUS_NAME!, {
-            eventBusName: process.env.EVENT_BUS_NAME,
+        const bus = new EventBus(this, EVENT_BUS_NAME!, {
+            eventBusName: EVENT_BUS_NAME,
         });
 
         const publishMailSentSuccessRule = new Rule(
@@ -31,9 +32,9 @@ export class PicklesEventBusConstruct extends Construct {
                 enabled: true,
                 description: 'When Mail is being sent to recipient',
                 eventPattern: {
-                    source: [process.env.EMAIL_EVENT_SOURCE_NAME!],
+                    source: [EMAIL_EVENT_SOURCE_NAME!],
                     detailType: [
-                        process.env.EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE!,
+                        EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE!,
                     ],
                 },
                 ruleName: 'PublishMailSentSuccessRule',
@@ -47,9 +48,9 @@ export class PicklesEventBusConstruct extends Construct {
                 enabled: true,
                 description: 'When Mail is not sent successfully to recipient',
                 eventPattern: {
-                    source: [process.env.EMAIL_EVENT_SOURCE_NAME!],
+                    source: [EMAIL_EVENT_SOURCE_NAME!],
                     detailType: [
-                        process.env.EVENT_SENT_FAILED_EVENT_DETAIL_TYPE!,
+                        EVENT_SENT_FAILED_EVENT_DETAIL_TYPE!,
                     ],
                 },
                 ruleName: 'PublishMailSentFailedRule',
@@ -63,9 +64,9 @@ export class PicklesEventBusConstruct extends Construct {
                 enabled: true,
                 description: 'When Failed Mail needs to be retried',
                 eventPattern: {
-                    source: [process.env.EMAIL_EVENT_SOURCE_NAME!],
+                    source: [EMAIL_EVENT_SOURCE_NAME!],
                     detailType: [
-                        process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
+                        EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
                     ],
                 },
                 ruleName: 'PublishMailRetriesRule',

@@ -1,11 +1,12 @@
 import * as dotEnv from 'dotenv';
 import { PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
+import { IMailSubmitted } from '../../../../mailer/src/models';
 
 dotEnv.config();
 
-export const publishMailSentEvent = async (payload): Promise<string> => {
-    console.log('publishMailSentEvent with payload :', payload);
+export const publishMailSentFailedEvent = async (payload: IMailSubmitted): Promise<string> => {
+    console.log('publishMailSentFailedEvent with payload :', payload);
     console.log('process.env', process.env);
     try {
         // eventbridge parameters for setting event to target system
@@ -14,7 +15,7 @@ export const publishMailSentEvent = async (payload): Promise<string> => {
                 {
                     Source: process.env.EMAIL_EVENT_SOURCE_NAME,
                     Detail: JSON.stringify(payload),
-                    DetailType: process.env.EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE,
+                    DetailType: process.env.EVENT_SENT_FAILED_EVENT_DETAIL_TYPE,
                     Resources: [],
                     EventBusName: process.env.EVENT_BUS_NAME,
                 }

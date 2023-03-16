@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mailer-backend-config
+  labels:
+    app: mailer-backend
+data:
+  ENQUIRY_PORT: '8081'

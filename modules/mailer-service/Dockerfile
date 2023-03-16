@@ -5,7 +5,6 @@ WORKDIR /usr/app
 
 # Copy required config files
 COPY package*.json ./
-# COPY tsconfig*.json .
 
 # Install dependencies
 RUN npm i

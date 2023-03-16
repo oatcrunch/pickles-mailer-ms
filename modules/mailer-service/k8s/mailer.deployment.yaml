@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailer-backend-deployment
+  labels:
+    app: mailer-backend
+spec:
+  selector:
+    matchLabels:
+      app: mailer-backend
+  template:
+    metadata:
+      labels:
+        app: mailer-backend
+    spec:
+      containers:
+      - name: mailer-backend-pod
+        image: oatcrunch/pickle-mailer:0.1.2
+        resources:
+            limits:
+              cpu: 200m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 50Mi
+        ports:
+        - containerPort: 8081
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: mailer-backend-config
+      restartPolicy: Always

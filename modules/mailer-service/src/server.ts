@@ -38,7 +38,7 @@ const serverId = uuidv4();
 
 // Health check endpoint
 app.get('/', (req: Request, res: Response) => {
-    res.send(`Endpoint reachable from ${serverId}!`);
+    res.send(`Health check endpoint reachable from ${serverId}!`);
 });
 
 // HTTP POST with body payload test endpoint

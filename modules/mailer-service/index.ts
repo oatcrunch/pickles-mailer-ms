@@ -19,8 +19,6 @@ import {
     MAIL_TRAIL_TABLE_NAME,
 } from './src/helpers/generic/constants';
 
-// require('./src/server');
-
 export {
     // Event related
     publishMailSentSuccessfulEvent,

@@ -1,13 +1,13 @@
 import * as dotEnv from 'dotenv';
-import { PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
+import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
 import { IMail } from '../../entities/mail';
 
 dotEnv.config();
 
-export const publishMailRetryEvent = async (payload: IMail): Promise<string> => {
+export const publishMailRetryEvent = async (payload: IMail, client?: EventBridgeClient): Promise<string> => {
     console.log('publishMailRetryEvent with payload :', payload);
-    console.log('process.env', process.env);
+
     try {
         // eventbridge parameters for setting event to target system
         const params: PutEventsCommandInput = {
@@ -22,7 +22,11 @@ export const publishMailRetryEvent = async (payload: IMail): Promise<string> => 
             ]
         };
 
-        const ret = await ebClient.send(new PutEventsCommand(params));
+        if (!client) {
+            client = ebClient;
+        }
+
+        const ret = await client.send(new PutEventsCommand(params));
         console.log('Success, event sent: ', ret);
         const requestId = ret['$metadata'].requestId;
 

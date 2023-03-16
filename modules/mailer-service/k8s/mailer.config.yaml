@@ -5,4 +5,4 @@ metadata:
   labels:
     app: mailer-backend
 data:
-  ENQUIRY_PORT: '8081'
+  EMAIL_PORT: '8081'

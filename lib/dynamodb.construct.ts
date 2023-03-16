@@ -26,7 +26,7 @@ export class PicklesDynamoDbConstruct extends Construct {
                 type: AttributeType.STRING,
             },
             sortKey: {
-                name: 'modifiedDate',
+                name: 'emailTransactionId',
                 type: AttributeType.STRING,
             },
             tableName: process.env.MAIL_TRAIL_TABLE_NAME,

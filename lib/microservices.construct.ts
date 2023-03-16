@@ -27,9 +27,15 @@ export class PicklesMicroservicesConstruct extends Construct {
 
     constructor(scope: Construct, id: string, props: IMicroserviceProps) {
         super(scope, id);
-        this.handleEmailSentSuccessFn = this.createHandleEmailSentSuccessFn(props.mailTrailTbl);
-        this.handleEmailSentFailedFn = this.createHandleEmailSentFailedFn(props.mailTrailTbl);
-        this.handleEmailRetriesFn = this.createHandleEmailRetriesFn(props.mailTrailTbl);
+        this.handleEmailSentSuccessFn = this.createHandleEmailSentSuccessFn(
+            props.mailTrailTbl
+        );
+        this.handleEmailSentFailedFn = this.createHandleEmailSentFailedFn(
+            props.mailTrailTbl
+        );
+        this.handleEmailRetriesFn = this.createHandleEmailRetriesFn(
+            props.mailTrailTbl
+        );
     }
 
     private createHandleEmailSentSuccessFn(dbTable: ITable): NodejsFunction {
@@ -46,6 +52,11 @@ export class PicklesMicroservicesConstruct extends Construct {
                 bundling: {
                     minify: true,
                     externalModules: ['aws-sdk'],
+                },
+                environment: {
+                    PRIMARY_KEY: 'id',
+                    SORT_KEY: 'emailTransactionId',
+                    MAIL_TRAIL_TABLE_NAME: dbTable.tableName,
                 },
             }
         );

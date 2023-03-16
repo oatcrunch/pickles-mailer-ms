@@ -36,7 +36,13 @@ export interface IAttachmentInfo {
 
 export interface IMailSubmitted {
     emailTransactionId: string;
-    uploadTransactionId: string;
     successfulDelivery: boolean;
+    uploadTransactionId?: string;
     creationDate: Date;
+}
+
+export interface IMailTrailEntity extends IMailSubmitted {
+    id: string;
+    attemptNumber?: number;
+    attemptTimeStamp?: string;  // compatibility issue
 }

@@ -1,13 +1,19 @@
 import * as dotEnv from 'dotenv';
-import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws-sdk/client-eventbridge';
+import {
+    EventBridgeClient,
+    PutEventsCommand,
+    PutEventsCommandInput,
+} from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
 import { IMail } from '../../entities/mail';
 
 dotEnv.config();
 
-export const publishMailRetryEvent = async (payload: IMail, client?: EventBridgeClient): Promise<string> => {
-    console.log('publishMailRetryEvent with payload :', payload);
-
+// To publish event for triggering mail retries
+export const publishMailRetryEvent = async (
+    payload: IMail,
+    client?: EventBridgeClient
+): Promise<string> => {
     try {
         // eventbridge parameters for setting event to target system
         const params: PutEventsCommandInput = {
@@ -15,11 +21,12 @@ export const publishMailRetryEvent = async (payload: IMail, client?: EventBridge
                 {
                     Source: process.env.EMAIL_EVENT_SOURCE_NAME,
                     Detail: JSON.stringify(payload),
-                    DetailType: process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
+                    DetailType:
+                        process.env.EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
                     Resources: [],
                     EventBusName: process.env.EVENT_BUS_NAME,
-                }
-            ]
+                },
+            ],
         };
 
         if (!client) {

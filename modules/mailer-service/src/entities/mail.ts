@@ -5,10 +5,7 @@ export interface IMail {
 }
 
 export interface IMailSubmitted extends IMail {
-    // emailTransactionId: string;
-    // emailData: any;
     successfulDelivery: boolean;
-    // uploadTransactionId?: string;
     creationDate: Date;
 }
 

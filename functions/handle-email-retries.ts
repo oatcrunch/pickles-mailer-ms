@@ -25,6 +25,7 @@ export const main = async (
 };
 
 const processBody = async (body: string) => {
+    // TODO:
     // 1. look for db rows based on email transaction id
     // 2. if count is more than 3 then return saying exceeded retries, else proceed with step 3
     // 3. if count is less than 3 and if upload transaction id is not empty, then list objects from s3 based on that id

@@ -36,10 +36,12 @@ app.use(express.json());
 // Server instance unique ID
 const serverId = uuidv4();
 
+// Health check endpoint
 app.get('/', (req: Request, res: Response) => {
     res.send(`Endpoint reachable from ${serverId}!`);
 });
 
+// HTTP POST with body payload test endpoint
 app.post('/test', async (req: Request, res: Response) => {
     try {
         console.log(req.body);
@@ -49,6 +51,7 @@ app.post('/test', async (req: Request, res: Response) => {
     }
 });
 
+// HTTP POST endpoint to send email (supports both json and file(s) as multipart)
 app.post(
     '/email',
     upload.fields([{ name: 'file', maxCount: 3 }, { name: 'json' }]),
@@ -61,7 +64,10 @@ app.post(
             }
             console.log('POST /email: body', req.body);
             const files: any = req.files;
-            console.log('POST /email: files', files? files['file'] : undefined);
+            console.log(
+                'POST /email: files',
+                files ? files['file'] : undefined
+            );
 
             if (!req.body.json) {
                 throw Error('Body.json object is mandatory');
@@ -86,22 +92,21 @@ app.post(
                 ...parsedJson,
                 attachments,
             });
-            console.log('emailReceipt', emailReceipt);
 
             // 2. Upload attachments to S3
             const uploadToS3Receipt = await uploadS3(attachments);
-            console.log('uploadToS3Receipt', uploadToS3Receipt);
 
             // 3a. If email delivery successful, publish mail sent success event
             if (emailReceipt.success) {
-                const publishMailSuccessfulReceipt = await publishMailSentSuccessfulEvent({
-                    emailTransactionId: emailReceipt.transactionId,
-                    uploadTransactionId: uploadToS3Receipt.transactionId,
-                    successfulDelivery: true,
-                    creationDate: new Date(),
-                    emailData: parsedJson
-                });
-                console.log('publishMailSuccessfulReceipt', publishMailSuccessfulReceipt);
+                const publishMailSuccessfulReceipt =
+                    await publishMailSentSuccessfulEvent({
+                        emailTransactionId: emailReceipt.transactionId,
+                        uploadTransactionId: uploadToS3Receipt.transactionId,
+                        successfulDelivery: true,
+                        creationDate: new Date(),
+                        emailData: parsedJson,
+                    });
+
                 res.status(201).send(publishMailSuccessfulReceipt);
                 return;
             }
@@ -112,10 +117,9 @@ app.post(
                 uploadTransactionId: uploadToS3Receipt.transactionId,
                 successfulDelivery: false,
                 creationDate: new Date(),
-                emailData: parsedJson
+                emailData: parsedJson,
             });
 
-            console.log('publishMailFailedReceipt', publishMailFailedReceipt);
             res.status(200).send(publishMailFailedReceipt);
         } catch (err: any) {
             console.error(err);
@@ -125,6 +129,5 @@ app.post(
 );
 
 app.listen(PORT, () => {
-    console.log('env', process.env);
     console.log(`Server listening on port ${PORT}`);
 });

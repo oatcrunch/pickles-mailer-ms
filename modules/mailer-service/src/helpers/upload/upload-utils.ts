@@ -20,11 +20,12 @@ const client = new S3Client({
     },
 });
 
+// Upload file attachments to S3
 export const uploadS3 = async (
     files: IAttachmentInfo[]
 ): Promise<IUploadTransaction> => {
     let uploadTransaction: IUploadTransaction = {
-        transactionId: ''
+        transactionId: '',
     };
     try {
         if (files && files.length > 0) {
@@ -45,7 +46,6 @@ export const uploadS3 = async (
         return uploadTransaction;
     } catch (err) {
         console.error('Exception caught in uploadS3', err);
-        // throw err;
     }
     return uploadTransaction;
 };

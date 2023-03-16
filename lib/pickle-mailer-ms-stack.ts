@@ -18,7 +18,7 @@ export class PickleMailerMsStack extends cdk.Stack {
             this,
             'Microservices',
             {
-                mailTrailTbl: database.mailTrailTable
+                mailTrailTbl: database.mailTrailTable,
             }
         );
 
@@ -38,7 +38,7 @@ export class PickleMailerMsStack extends cdk.Stack {
             emailSentFailedQueue: queue.emailSentFailedQueue,
             emailRetriesQueue: queue.emailRetriesQueue,
             emailRetryPublisher: microservices.handleEmailRetriesFn,
-            emailSentFailedPublisher: microservices.handleEmailSentFailedFn
+            emailSentFailedPublisher: microservices.handleEmailSentFailedFn,
         });
     }
 }

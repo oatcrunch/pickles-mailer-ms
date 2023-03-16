@@ -9,7 +9,7 @@ dotEnv.config();
 
 interface PicklesEventBusProps {
     emailRetryPublisher: IFunction;
-    emailSentFailedPublisher: IFunction,
+    emailSentFailedPublisher: IFunction;
     emailSentSuccessQueue: IQueue;
     emailSentFailedQueue: IQueue;
     emailRetriesQueue: IQueue;
@@ -78,12 +78,10 @@ export class PicklesEventBusConstruct extends Construct {
         publishMailSentFailedRule.addTarget(
             new SqsQueue(props.emailSentFailedQueue)
         );
-        publishMailRetriesRule.addTarget(
-            new SqsQueue(props.emailRetriesQueue)
-        );
+        publishMailRetriesRule.addTarget(new SqsQueue(props.emailRetriesQueue));
 
         // grant publisher to PUT events to event bus
         bus.grantPutEventsTo(props.emailRetryPublisher); // prevent AccessDeniedException
-        bus.grantPutEventsTo(props.emailSentFailedPublisher);
+        bus.grantPutEventsTo(props.emailSentFailedPublisher); // prevent AccessDeniedException
     }
 }

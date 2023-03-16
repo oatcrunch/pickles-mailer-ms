@@ -9,10 +9,14 @@ import {
     SQSEvent,
 } from 'aws-lambda';
 import { ddbClient } from '../data-access/db-client';
-import { IMailSubmitted, IMailTrailEntity } from '../modules/mailer-service/src/entities/mail';
+import {
+    IMailSubmitted,
+    IMailTrailEntity,
+} from '../modules/mailer-service/src/entities/mail';
 
 dotEnv.config();
 
+// Saves successful email delivery to database
 export const main = async (
     event: APIGatewayEvent | SQSEvent,
     context: Context
@@ -40,14 +44,13 @@ export const main = async (
 };
 
 const processBody = async (body: string) => {
-    console.log('processBody - body', body);
     const parsedBody = JSON.parse(body);
-    console.log('parsedBody', parsedBody);
     const detail = parsedBody.detail;
-    console.log('detail', detail);
+
     if (!(await persistData(detail))) {
         throw new Error('Process body operation failed');
     }
+
     return {
         statusCode: 200,
         body: JSON.stringify({
@@ -59,14 +62,12 @@ const processBody = async (body: string) => {
 };
 
 const persistData = async (data: IMailSubmitted): Promise<boolean> => {
-    console.log(`persistData - data: "${JSON.stringify(data)}"`);
     const rowData: IMailTrailEntity = {
         ...data,
         id: uuidv4(),
         attemptNumber: 0,
     };
-    console.log('rowData', rowData);
-    console.log('process.env.MAIL_TRAIL_TABLE_NAME', process.env.MAIL_TRAIL_TABLE_NAME);
+
     try {
         const params = {
             TableName: process.env.MAIL_TRAIL_TABLE_NAME,
@@ -74,7 +75,9 @@ const persistData = async (data: IMailSubmitted): Promise<boolean> => {
         };
 
         const createResult = await ddbClient.send(new PutItemCommand(params));
-        console.log(`persistData - createResult: "${JSON.stringify(createResult)}"`);
+        console.log(
+            `persistData - createResult: "${JSON.stringify(createResult)}"`
+        );
         return true;
     } catch (err) {
         console.error(err);

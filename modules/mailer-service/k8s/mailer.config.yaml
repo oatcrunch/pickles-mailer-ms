@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mailer-backend-config
+  namespace: mailer
   labels:
     app: mailer-backend
 data:

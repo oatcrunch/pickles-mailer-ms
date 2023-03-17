@@ -4,7 +4,19 @@ This is a simple POC project to demonstrate highly available emailing microservi
 
 ## Issues and Considerations
 
-TODO
+What this design/solution considers:
+- High availability
+- Extensibility
+- Portability
+- Cost
+- Features:
+    - Send email to single or multiple recipients
+    - Ability to attach files
+    - Error handling
+    - Retries
+    - Audit trail (storing in database)
+    - Persistence of attachments in server
+    - Supports HTML
 
 ## High Level Architecture
 
@@ -51,6 +63,14 @@ TODO
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
 ## Running on production mode
+
+TODO
+
+
+## Potential Improvements
+
+TODO
+
 ## Set Up Instructions
 -   `npm run build` compile typescript to js
 -   `npm run watch` watch for changes and compile

@@ -2,6 +2,10 @@
 
 This is a simple POC project to demonstrate highly available emailing microservice backend application. This project is developed mainly using Typescript as the primary language and it leverages on ExpressJS as the library to run backend service. There are scripts written to automate deployment into AWS cloud (AWS CDK library that generates cloud formation template and also eksctl client library to create Kubernetes cluster on AWS).  
 
+## Issues and Considerations
+
+TODO
+
 ## High Level Architecture
 
 TODO
@@ -42,7 +46,8 @@ TODO
 1. On the project root directory, run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
 
 ### Run the ExpressJS backend locally
-1. On a separate terminal (project root), run `npm run build-start` to trigger build and then start the application.
+1. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
+1. Run `npm run build-start` to trigger build and then start the application.
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
 ## Running on production mode

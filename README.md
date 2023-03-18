@@ -60,8 +60,10 @@ TODO
 4. Do take note on the `keys` in the example. The keys you have in your own .env must match with the ones in the sample above. 
 
 ### Deploy cloud infra using AWS CDK through command line
-1. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
-1. Run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
+1. Run `Docker Desktop` and ensure that both Docker and Kubernetes indicators on the bottom left of the application UI shows green.
+2. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
+3. Run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
+4. Note that after complete testing, do run `npm run destroy` to destroy the created stack on AWS to prevent additional costs from incurring (you still need Docker and Kubernetes to be running for this).
 
 ### Running the ExpressJS backend locally
 
@@ -69,32 +71,30 @@ TODO
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
 
-## Running on PRODUCTION mode
+## Running on PRODUCTION Mode
 
 1. Run `Docker Desktop` and ensure that both Docker and Kubernetes indicators on the bottom left of the application UI shows green.
 2. `cd` to `scripts` directory on terminal and run `create-cluster.bat` to create AWS cluster with a set of nodes of certain specs within a given region.
 3. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. Once it prompts you to proceed with deployment, type `y` and press enter.
-4. Once step 1 has completed (practise patience as the operations may take up to 30 minutes for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
+4. Once step 1 has completed (practise patience as the operations may take 30 minutes or even more for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
 5. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
+6. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
 
-## Testing the application
+## Testing the Application
 
 1. If you are running on DEVELOPMENT mode, your URL should be http://localhost:3000.
-2. If you are running on PRODUCTION mode, your URL should be the AWS load balancer service's URL.
-3. The endpoint of which we will be testing be `HTTP POST '/email'` with the body payload illustrated below.
+2. If you are running on PRODUCTION mode, your URL should be the AWS load balancer service's URL (refer demo video below).
+3. The relative resource path of which we will be testing be `HTTP POST '/email'` with the body payload illustrated below.
 
 Click on below image icon to view the demo video:
 [![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)
 
-## Potential Improvements
+## Discussion and Assumptions Made
 
-TODO
-
-
-## Set Up Instructions
--   `npm run build` compile typescript to js
--   `npm run watch` watch for changes and compile
--   `npm run test` perform the jest unit tests
--   `cdk deploy` deploy this stack to your default AWS account/region
--   `cdk diff` compare deployed stack with current state
--   `cdk synth` emits the synthesized CloudFormation template
+1. This proof of concept is based on assumption that the cloud SMTP mail server is highly available, but without much info on the performance metric.
+2. There is some limitation on the API used to send email because it will not tell which user(s) from a given set of email addresses as recipients is/are not getting the email.
+3. Based on the above point, we ONLY know if the delivery fails if ALL of the recipients are not getting the email at all.
+4. The event payload that AWS lambda is able to accept is limited. Hence, we cannot use it to handle email with large file attachments (dockerized application can better handle this).
+5. The event hub can be substituted with tools like Apache Kafka. However, take note that this requires more management on the resources needed, hence extra time and cost involved.
+6. It is possible to have a queue fronting the load balancer. However, in this design it is not used as I believe that the load balanced dockerized applications are able to handle that (again just an assumption made as no thorough tests are being done).
+7. For point above, the queue (AWS Event Bridge, Apache Kafka, Rabbit MQ etc) should be able to reduce the load to the core application, but it would cause performance issue ie longer time to receive email and to get data persisted.

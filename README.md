@@ -79,7 +79,7 @@ _Figure 2: AWS Solutions Architecture Diagram_
 1. While still on project root, run `npm run build-start` to trigger build and then start the application.
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
-## Running on PRODUCTION Mode
+## Running on PRODUCTION Mode (for Linux machine, you may wish to run the corresponding .sh files instead)
 
 1. Replace `./modules/mailer-service/mailer.secret.yaml`'s `replace_with_base64_encoded_string` string with the corresponding `base64 encoded` string of the values you stored in your .env file earlier (you can use this online **[tool](https://www.base64encode.org/)**). It should look like the following:
    [![sample of mailter.secret.yaml](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/secrets+yaml.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/secrets+yaml.PNG)
@@ -88,7 +88,7 @@ _Figure 2: AWS Solutions Architecture Diagram_
 4. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. Once it prompts you to proceed with deployment, type `y` and press enter.
 5. Once step 1 has completed (practise patience as the operations may take 30 minutes or even more for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
 6. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
-7. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
+7. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` (press `y` and enter when prompted) to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
 
 ## Testing the Application
 

@@ -81,12 +81,14 @@ _Figure 2: AWS Solutions Architecture Diagram_
 
 ## Running on PRODUCTION Mode
 
-1. Run `Docker Desktop` and ensure that both Docker and Kubernetes indicators on the bottom left of the application UI shows green.
-2. `cd` to `scripts` directory on terminal and run `create-cluster.bat` to create AWS cluster with a set of nodes of certain specs within a given region.
-3. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. Once it prompts you to proceed with deployment, type `y` and press enter.
-4. Once step 1 has completed (practise patience as the operations may take 30 minutes or even more for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
-5. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
-6. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
+1. Replace `./modules/mailer-service/mailer.secret.yaml`'s `replace_with_base64_encoded_string` string with the corresponding `base64 encoded` string of the values you stored in your .env file earlier (you can use this online **[tool](https://www.base64encode.org/)**). It should look like the following:
+   [![sample of mailter.secret.yaml](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/secrets+yaml.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/secrets+yaml.PNG)
+2. Run `Docker Desktop` and ensure that both Docker and Kubernetes indicators on the bottom left of the application UI shows green.
+3. `cd` to `scripts` directory on terminal and run `create-cluster.bat` to create AWS cluster with a set of nodes of certain specs within a given region.
+4. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. Once it prompts you to proceed with deployment, type `y` and press enter.
+5. Once step 1 has completed (practise patience as the operations may take 30 minutes or even more for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
+6. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
+7. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
 
 ## Testing the Application
 

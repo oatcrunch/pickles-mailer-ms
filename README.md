@@ -76,16 +76,15 @@ TODO
 3. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. Once it prompts you to proceed with deployment, type `y` and press enter.
 4. Once step 1 has completed (practise patience as the operations may take up to 30 minutes for deployment), run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
 5. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
-[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)
-
-Click on below image icon to view the demo video:
-[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)
 
 ## Testing the application
 
 1. If you are running on DEVELOPMENT mode, your URL should be http://localhost:3000.
 2. If you are running on PRODUCTION mode, your URL should be the AWS load balancer service's URL.
 3. The endpoint of which we will be testing be `HTTP POST '/email'` with the body payload illustrated below.
+
+Click on below image icon to view the demo video:
+[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)
 
 ## Potential Improvements
 

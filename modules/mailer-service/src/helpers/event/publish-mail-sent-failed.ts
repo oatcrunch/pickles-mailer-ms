@@ -6,7 +6,11 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import { IMailSubmitted } from '../../entities/mail';
 import { ebClient } from './event-publisher';
-import { EMAIL_EVENT_SOURCE_NAME, EVENT_BUS_NAME, EVENT_SENT_FAILED_EVENT_DETAIL_TYPE } from '../generic/constants';
+import {
+    EMAIL_EVENT_SOURCE_NAME,
+    EVENT_BUS_NAME,
+    EVENT_SENT_FAILED_EVENT_DETAIL_TYPE,
+} from '../generic/constants';
 
 dotEnv.config();
 

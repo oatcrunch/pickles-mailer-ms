@@ -6,7 +6,11 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
 import { IMail } from '../../entities/mail';
-import { EMAIL_EVENT_SOURCE_NAME, EVENT_BUS_NAME, EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE } from '../generic/constants';
+import {
+    EMAIL_EVENT_SOURCE_NAME,
+    EVENT_BUS_NAME,
+    EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
+} from '../generic/constants';
 
 dotEnv.config();
 
@@ -22,8 +26,7 @@ export const publishMailRetryEvent = async (
                 {
                     Source: EMAIL_EVENT_SOURCE_NAME,
                     Detail: JSON.stringify(payload),
-                    DetailType:
-                        EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
+                    DetailType: EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
                     Resources: [],
                     EventBusName: EVENT_BUS_NAME,
                 },

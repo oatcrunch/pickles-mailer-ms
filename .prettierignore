@@ -7,3 +7,6 @@ cdk.out
 
 # Ignore all HTML files:
 *.html
+
+# Prevent alignment consistency change
+*.yaml

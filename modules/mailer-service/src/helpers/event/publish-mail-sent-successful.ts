@@ -6,7 +6,11 @@ import {
 } from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
 import { IMailSubmitted } from '../../entities/mail';
-import { EMAIL_EVENT_SOURCE_NAME, EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE, EVENT_BUS_NAME } from '../generic/constants';
+import {
+    EMAIL_EVENT_SOURCE_NAME,
+    EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE,
+    EVENT_BUS_NAME,
+} from '../generic/constants';
 
 dotEnv.config();
 
@@ -22,8 +26,7 @@ export const publishMailSentSuccessfulEvent = async (
                 {
                     Source: EMAIL_EVENT_SOURCE_NAME,
                     Detail: JSON.stringify(payload),
-                    DetailType:
-                        EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE,
+                    DetailType: EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE,
                     Resources: [],
                     EventBusName: EVENT_BUS_NAME,
                 },

@@ -4,7 +4,13 @@ import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { SqsQueue } from 'aws-cdk-lib/aws-events-targets';
 import { IQueue } from 'aws-cdk-lib/aws-sqs';
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
-import { EMAIL_EVENT_SOURCE_NAME, EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE, EVENT_BUS_NAME, EVENT_SENT_FAILED_EVENT_DETAIL_TYPE, EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE } from '../modules/mailer-service';
+import {
+    EMAIL_EVENT_SOURCE_NAME,
+    EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE,
+    EVENT_BUS_NAME,
+    EVENT_SENT_FAILED_EVENT_DETAIL_TYPE,
+    EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE,
+} from '../modules/mailer-service';
 
 dotEnv.config();
 
@@ -33,9 +39,7 @@ export class PicklesEventBusConstruct extends Construct {
                 description: 'When Mail is being sent to recipient',
                 eventPattern: {
                     source: [EMAIL_EVENT_SOURCE_NAME!],
-                    detailType: [
-                        EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE!,
-                    ],
+                    detailType: [EMAIL_SENT_SUCCESS_EVENT_DETAIL_TYPE!],
                 },
                 ruleName: 'PublishMailSentSuccessRule',
             }
@@ -49,9 +53,7 @@ export class PicklesEventBusConstruct extends Construct {
                 description: 'When Mail is not sent successfully to recipient',
                 eventPattern: {
                     source: [EMAIL_EVENT_SOURCE_NAME!],
-                    detailType: [
-                        EVENT_SENT_FAILED_EVENT_DETAIL_TYPE!,
-                    ],
+                    detailType: [EVENT_SENT_FAILED_EVENT_DETAIL_TYPE!],
                 },
                 ruleName: 'PublishMailSentFailedRule',
             }
@@ -65,9 +67,7 @@ export class PicklesEventBusConstruct extends Construct {
                 description: 'When Failed Mail needs to be retried',
                 eventPattern: {
                     source: [EMAIL_EVENT_SOURCE_NAME!],
-                    detailType: [
-                        EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!,
-                    ],
+                    detailType: [EVENT_SENT_RETRIES_EVENT_DETAIL_TYPE!],
                 },
                 ruleName: 'PublishMailRetriesRule',
             }

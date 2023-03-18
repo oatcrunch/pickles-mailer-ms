@@ -4,7 +4,11 @@ import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { IQueue, Queue } from 'aws-cdk-lib/aws-sqs';
 import { Construct } from 'constructs';
-import { EMAIL_SENT_SUCCCESS_QUEUE_NAME, EVENT_SENT_FAILED_QUEUE_NAME, EVENT_SENT_RETRIES_QUEUE_NAME } from '../modules/mailer-service';
+import {
+    EMAIL_SENT_SUCCCESS_QUEUE_NAME,
+    EVENT_SENT_FAILED_QUEUE_NAME,
+    EVENT_SENT_RETRIES_QUEUE_NAME,
+} from '../modules/mailer-service';
 
 dotEnv.config();
 

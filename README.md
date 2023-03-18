@@ -2,11 +2,14 @@
 
 This is a simple POC project to demonstrate highly available emailing microservice backend application. This project is developed mainly using Typescript as the primary language and it leverages on ExpressJS as the library to run backend service. There are scripts written to automate deployment into AWS cloud (AWS CDK library that generates cloud formation template and also eksctl client library to create Kubernetes cluster on AWS).  
 
+
 ## Issues and Considerations
 
 What this design/solution considers:
 - High availability
 - Extensibility
+- Auto-scalability
+- Resiliency
 - Portability
 - Cost
 - Features:
@@ -18,9 +21,11 @@ What this design/solution considers:
     - Persistence of attachments in server
     - Supports HTML
 
+
 ## High Level Architecture
 
 TODO
+
 
 ## Pre-requisites
 
@@ -55,21 +60,27 @@ TODO
 4. Do take note on the `keys` in the example. The keys you have in your own .env must match with the ones in the sample above. 
 
 ### Deploy cloud infra using AWS CDK through command line
-1. On the project root directory, run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
+1. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
+1. Run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
 
 ### Run the ExpressJS backend locally
-1. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
-1. Run `npm run build-start` to trigger build and then start the application.
+
+1. While still on project root, run `npm run build-start` to trigger build and then start the application.
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
+
 
 ## Running on production mode
 
-TODO
+1. `cd` to `scripts` directory on terminal and run `create-cluster.bat` to create AWS cluster with a set of nodes of certain specs within a given region.
+2. While operation on step 1 is still running, open another terminal and on the same directory as step 1, run `deploy-persistence-stack.bat`. This step will deploy persistence cloud infra such as DynamoDB and S3 as well as other supporting services.
+3. Once step 1 has completed, run `deploy-k8s.bat` on any of the terminal to deploy Kubernetes resources into the newly created cluster from step 1.
+4. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. 
 
 
 ## Potential Improvements
 
 TODO
+
 
 ## Set Up Instructions
 -   `npm run build` compile typescript to js

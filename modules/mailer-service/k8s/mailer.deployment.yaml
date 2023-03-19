@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mailer-backend-pod
-        image: oatcrunch/pickle-mailer:0.1.3
+        image: oatcrunch/pickle-mailer:0.1.4
         resources:
             limits:
               cpu: 300m

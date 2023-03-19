@@ -98,11 +98,11 @@ _Figure 2: AWS Solutions Architecture Diagram_
 ## Testing the Application
 
 1. If you are running on DEVELOPMENT mode, your URL should be http://localhost:3000.
-2. If you are running on PRODUCTION mode, your URL should be the AWS load balancer service's URL (refer demo video below).
+2. If you are running on PRODUCTION mode, your URL should be the AWS load balancer service's URL (running `kubectl get svc -n mailer` command and grab the `EXTERNAL-IP` field, make sure you use the right port which is `8081`). For example: `afa0e894c77bf41a5b2e8cd464acba25-1793325236.ap-southeast-1.elb.amazonaws.com:8081`.
 3. The relative resource path of which we will be testing be `HTTP POST '/email'` with the body payload illustrated below.
 
-Click on below image icon to view the demo video:
-[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4)
+Click on below image icon to view the demo video on how to run the test:
+[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)]([https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4]([https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)))
 
 ## Discussion and Assumptions Made
 

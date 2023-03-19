@@ -102,7 +102,7 @@ _Figure 2: AWS Solutions Architecture Diagram_
 3. The relative resource path of which we will be testing be `HTTP POST '/email'` with the body payload illustrated below.
 
 Click on below image icon to view the demo video on how to run the test:
-[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)]([https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/POST+to+email+endpoint+prod+mode.mp4]([https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)))
+[![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)
 
 ## Discussion and Assumptions Made
 

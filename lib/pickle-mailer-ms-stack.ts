@@ -13,17 +13,18 @@ export class PickleMailerMsStack extends cdk.Stack {
         // Create database infra to store audit trail of email sent
         const database = new PicklesDynamoDbConstruct(this, 'Database');
 
+        // Create S3 infra to store email attachments
+        const s3 = new PicklesS3Construct(this, 'S3', {});
+
         // Create microservice functions infra
         const microservices = new PicklesMicroservicesConstruct(
             this,
             'Microservices',
             {
                 mailTrailTbl: database.mailTrailTable,
-            }
+                bucket: s3.bucket
+            },
         );
-
-        // Create S3 infra to store email attachments
-        const s3 = new PicklesS3Construct(this, 'S3', {});
 
         // Create queues attached to event hub to create fan-out pattern
         const queue = new PicklesSqsConstruct(this, 'Queue', {

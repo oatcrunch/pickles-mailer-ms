@@ -8,7 +8,7 @@ import { IEmailTransaction } from '../../models/transaction';
 const OAuth2 = google.auth.OAuth2;
 
 // Create Nodemailer transporter using specified credentials
-const createTransporter = async (config: IEmailDeliveryOAuth2Config) => {
+export const createTransporter = async (config: IEmailDeliveryOAuth2Config) => {
     const oauth2Client = new OAuth2(
         config.clientId,
         config.clientSecret,

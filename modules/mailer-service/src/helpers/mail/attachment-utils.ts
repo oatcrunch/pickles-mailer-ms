@@ -8,8 +8,18 @@ export const createAttachmentsObj = (files: any[]): IAttachmentInfo[] => {
     try {
         if (files) {
             for (const f of files) {
-                const fileId = uuidv4();
                 const mimetype = <string>f.mimetype;
+
+                if (!mimetype) {
+                    throw Error('Missing mimeType');
+                }
+
+                const content = f.buffer;
+                if (!content) {
+                    throw Error('Missing file content buffer');
+                }
+
+                const fileId = uuidv4();
                 const ext = <string>mime.extension(mimetype);
                 const filename = `${fileId}.${ext}`;
 
@@ -17,7 +27,7 @@ export const createAttachmentsObj = (files: any[]): IAttachmentInfo[] => {
                     filename,
                     fileId,
                     ext,
-                    content: f.buffer,
+                    content,
                     mimetype,
                 });
             }

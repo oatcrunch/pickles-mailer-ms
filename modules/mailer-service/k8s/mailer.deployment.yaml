@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailer-backend-deployment
+  namespace: mailer
+  labels:
+    app: mailer-backend
+spec:
+  selector:
+    matchLabels:
+      app: mailer-backend
+  template:
+    metadata:
+      labels:
+        app: mailer-backend
+    spec:
+      containers:
+      - name: mailer-backend-pod
+        image: oatcrunch/pickle-mailer:0.1.3
+        resources:
+            limits:
+              cpu: 300m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+        ports:
+        - containerPort: 8081
+        imagePullPolicy: Always
+        env:
+        - name: EMAIL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mailer-backend-config
+              key: EMAIL_PORT
+        - name: AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: AWS_ACCESS_KEY
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: AWS_SECRET_ACCESS_KEY
+        - name: EMAIL_ADDRESS
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: EMAIL_ADDRESS
+        - name: CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: CLIENT_ID
+        - name: CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: CLIENT_SECRET
+        - name: REFRESH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: mailer-backend-secret
+              key: REFRESH_TOKEN 
+      restartPolicy: Always

@@ -76,7 +76,7 @@ _Figure 2: AWS Solutions Architecture Diagram_
 
 ### Running the ExpressJS backend locally
 
-1. While still on project root, run `npm run build-start` to trigger build and then start the application.
+1. Navigate to "./modules/mailer-service" by running `cd ./modules/mailer-service` from project root, run `npm run build-start` to trigger build and then start the application.
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
 ## Running on PRODUCTION Mode (for Linux machine, you may wish to run the corresponding .sh files instead)

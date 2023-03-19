@@ -13,6 +13,7 @@
         "destroy": "cdk destroy",
         "scan": "npx prettier --check \"bin/**/*.ts\" \"lib/**/*.ts\" \"test/**/*.ts\" \"modules/**/*.ts\"",
         "fix": "npx prettier --write .",
+        "build-start": "npm run build && npm run start",
         "postinstall": "cd modules/mailer-service && npm i"
     },
     "devDependencies": {

@@ -9,16 +9,16 @@ import {
     EVENT_SENT_FAILED_QUEUE_NAME,
     EVENT_SENT_RETRIES_QUEUE_NAME,
 } from '../modules/mailer-service';
+import {
+    EMAIL_SENT_SUCCESS_QUEUE_TIMEOUT,
+    EMAIL_SENT_FAILED_QUEUE_TIMEOUT,
+    EMAIL_RETRIES_QUEUE_TIMEOUT,
+    EMAIL_SENT_SUCCESS_QUEUE_BATCH_SIZE,
+    EMAIL_SENT_FAILED_QUEUE_BATCH_SIZE,
+    EMAIL_RETRIES_QUEUE_BATCH_SIZE,
+} from '../modules/mailer-service/src/helpers/generic/constants';
 
 dotEnv.config();
-
-// Config constants
-const EMAIL_SENT_SUCCESS_QUEUE_TIMEOUT = 180;
-const EMAIL_SENT_FAILED_QUEUE_TIMEOUT = 180;
-const EMAIL_RETRIES_QUEUE_TIMEOUT = 360;
-const EMAIL_SENT_SUCCESS_QUEUE_BATCH_SIZE = 1;
-const EMAIL_SENT_FAILED_QUEUE_BATCH_SIZE = 1;
-const EMAIL_RETRIES_QUEUE_BATCH_SIZE = 1;
 
 interface SqsQueueProps {
     emailSentSuccessConsumer: IFunction;

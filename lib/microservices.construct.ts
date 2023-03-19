@@ -14,19 +14,18 @@ import {
     HANDLE_EMAIL_SENT_SUCCESS_FN,
 } from '../modules/mailer-service';
 import { IBucket } from 'aws-cdk-lib/aws-s3';
+import {
+    HANDLE_EMAIL_SUCCESS_MEMORY_GB,
+    HANDLE_EMAIL_SUCCESS_TIMEOUT,
+    HANDLE_EMAIL_FAILED_MEMORY_GB,
+    HANDLE_EMAIL_FAILED_TIMEOUT,
+    HANDLE_EMAIL_RETRIES_MEMORY_GB,
+    HANDLE_EMAIL_RETRIES_TIMEOUT,
+} from '../modules/mailer-service/src/helpers/generic/constants';
 
 dotEnv.config({
     path: join(__dirname, '/../modules/mailer-service/.env'),
 });
-
-// Config constants
-const HANDLE_EMAIL_SUCCESS_TIMEOUT = 180;
-const HANDLE_EMAIL_FAILED_TIMEOUT = 180;
-const HANDLE_EMAIL_RETRIES_TIMEOUT = 360;
-const HANDLE_EMAIL_SUCCESS_MEMORY_GB = 128;
-const HANDLE_EMAIL_FAILED_MEMORY_GB = 128;
-const HANDLE_EMAIL_RETRIES_MEMORY_GB = 256;
-
 export interface IMicroserviceProps {
     mailTrailTbl: ITable;
     bucket: IBucket;

@@ -44,6 +44,7 @@ export const publishMailSentSuccessfulEvent = async (
         return <string>requestId;
     } catch (e) {
         console.error(e);
-        throw e;
+        // throw e;
     }
+    return '';
 };

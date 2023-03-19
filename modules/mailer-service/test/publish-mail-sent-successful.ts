@@ -14,6 +14,7 @@ const date = new Date();
 
 // Mocked payload for mail success event
 const mockedMail: IMailSubmitted = {
+    id: '444',
     emailTransactionId: '12345',
     emailData: {},
     uploadTransactionId: '54321',

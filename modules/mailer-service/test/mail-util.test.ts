@@ -1,4 +1,4 @@
-import { IEmail } from "../src/models/email";
+import { IEmail } from '../src/models/email';
 import { validateEmailDto } from '../src/helpers/mail/mail-utils';
 
 describe('validateEmailDto', () => {
@@ -24,7 +24,7 @@ describe('validateEmailDto', () => {
         const emailDto: IEmail = {
             to: 'test@example.com',
             text: 'This is a test email',
-            subject: ''
+            subject: '',
         };
         expect(validateEmailDto(emailDto)).toBe(false);
     });
@@ -33,7 +33,7 @@ describe('validateEmailDto', () => {
         const emailDto: IEmail = {
             to: 'test@example.com',
             subject: 'Test Email',
-            text: ''
+            text: '',
         };
         expect(validateEmailDto(emailDto)).toBe(false);
     });

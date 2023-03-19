@@ -16,7 +16,7 @@ const mockedMail: IMail = {
     emailTransactionId: '12345',
     emailData: {},
     uploadTransactionId: '54321',
-    creationDate: new Date()
+    creationDate: new Date(),
 };
 
 class EventBridgeClientMockOk implements EventBridgeClient {

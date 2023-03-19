@@ -16,7 +16,7 @@ import {
 import { IBucket } from 'aws-cdk-lib/aws-s3';
 
 dotEnv.config({
-    path: join(__dirname, '/../modules/mailer-service/.env')
+    path: join(__dirname, '/../modules/mailer-service/.env'),
 });
 
 // Config constants
@@ -122,7 +122,7 @@ export class PicklesMicroservicesConstruct extends Construct {
                 EMAIL_ADDRESS: process.env.EMAIL_ADDRESS!,
                 CLIENT_ID: process.env.CLIENT_ID!,
                 CLIENT_SECRET: process.env.CLIENT_SECRET!,
-                REFRESH_TOKEN: process.env.REFRESH_TOKEN!
+                REFRESH_TOKEN: process.env.REFRESH_TOKEN!,
             },
         });
         dbTable.grantReadWriteData(fn); // to allow lambda function to read and write data to database

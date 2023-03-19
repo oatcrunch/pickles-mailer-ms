@@ -22,8 +22,8 @@ export class PickleMailerMsStack extends cdk.Stack {
             'Microservices',
             {
                 mailTrailTbl: database.mailTrailTable,
-                bucket: s3.bucket
-            },
+                bucket: s3.bucket,
+            }
         );
 
         // Create queues attached to event hub to create fan-out pattern

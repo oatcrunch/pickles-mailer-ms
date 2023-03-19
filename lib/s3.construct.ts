@@ -24,6 +24,6 @@ export class PicklesS3Construct extends Construct {
             autoDeleteObjects: true,
             removalPolicy: RemovalPolicy.DESTROY,
             blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-        }); 
+        });
     }
 }

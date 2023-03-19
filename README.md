@@ -1,6 +1,6 @@
 # Welcome to Pickles Mailer
 
-This is a simple POC project to demonstrate highly available emailing microservice backend application. This project is developed mainly using Typescript as the primary language and it leverages on ExpressJS as the library to run backend service. There are scripts written to automate deployment into AWS cloud (AWS CDK library that generates cloud formation template and also eksctl client library to create Kubernetes cluster on AWS).
+This is a simple POC project to demonstrate highly available emailing microservice backend application. This project is developed mainly using Typescript as the primary language and it leverages on ExpressJS as the library to run backend service. There are scripts written to automate deployment into AWS cloud (AWS CDK library that generates cloud formation (Infrastructure as a Code or IaaS) template and also eksctl client library to create Kubernetes cluster on AWS). No need to manually create them using the AWS Console.
 
 ## Issues and Considerations
 

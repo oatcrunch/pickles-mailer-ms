@@ -13,7 +13,7 @@ const REGION = AWS_BUCKET_REGION;
 const ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY;
 const SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
-const client = new S3Client({
+export const client = new S3Client({
     region: REGION,
     credentials: {
         accessKeyId: ACCESS_KEY_ID!,

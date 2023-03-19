@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as PickleMailerMs from '../lib/pickle-mailer-ms-stack';
 
+// Please run the following with Docker Desktop turned on
 describe('PickleMAilerMsTest', () => {
     const app = new cdk.App();
     const stack = new PickleMailerMs.PickleMailerMsStack(app, 'MyTestStack');

@@ -58,6 +58,12 @@ _Figure 2: AWS Solutions Architecture Diagram_
 1. Check the first half of **[this video](https://www.youtube.com/watch?v=-rcRf7yswfM)** on steps of how to get permission from a Google mail account to send email using libraries like Nodemailer.
 2. Please take note on the `Client ID`, `Client Secret`, and `Refresh Token` and save them somewhere for reference later.
 
+## Pre-run: Cloning Project and Installing Dependencies
+
+1. Run `git clone git@github.com:oatcrunch/pickles-mailer-ms.git` or manually download the zipped version of the project to any desired location on your local machine.
+2. Open the cloned project using your favourite IDE like Visual Studio Code.
+3. Open up a terminal at your project root directory and run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
+
 ## Running on DEVELOPMENT mode
 
 ### Prepare environment variable
@@ -70,13 +76,12 @@ _Figure 2: AWS Solutions Architecture Diagram_
 ### Deploy cloud infra using AWS CDK through command line
 
 1. Run `Docker Desktop` and ensure that both Docker and Kubernetes indicators on the bottom left of the application UI shows green.
-2. On project root, run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
-3. Run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
-4. Note that after complete testing, do run `npm run destroy` to destroy the created stack on AWS to prevent additional costs from incurring (you still need Docker and Kubernetes to be running for this).
+2. Run `npm run deploy` to create cloud formation stack on AWS which then creates the require cloud infra later on ie Lambda, EventBridge, SQS, DynamoDB and S3.
+3. Note that after completed testing, do run `npm run destroy` to destroy the created stack on AWS to prevent additional costs from incurring (you still need Docker and Kubernetes to be running for this).
 
 ### Running the ExpressJS backend locally
 
-1. While still on project root, run `npm run build-start` to trigger build and then start the application.
+1. Navigate to "./modules/mailer-service" by running `cd ./modules/mailer-service` from project root, run `npm run build-start` to trigger build and then start the application.
 2. Optionally, you can split into 2 consecutive commands ie. `npm run build` and `npm run start` in lieu of the previous step.
 
 ## Running on PRODUCTION Mode (for Linux machine, you may wish to run the corresponding .sh files instead)

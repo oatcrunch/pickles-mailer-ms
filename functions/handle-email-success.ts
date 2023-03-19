@@ -47,8 +47,9 @@ export const main = async (
 const processBody = async (body: string) => {
     const parsedBody = JSON.parse(body);
     const detail = parsedBody.detail;
+    const id = uuidv4();
 
-    if (!(await persistData(detail))) {
+    if (!(await persistData(detail, id))) {
         throw new Error('Process body operation failed');
     }
 
@@ -62,10 +63,11 @@ const processBody = async (body: string) => {
     };
 };
 
-const persistData = async (data: IMailSubmitted): Promise<boolean> => {
+const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> => {
     const rowData: IMailTrailEntity = {
         ...data,
-        id: uuidv4(),
+        id,
+        // id: uuidv4(),
         attemptNumber: 0,
     };
 

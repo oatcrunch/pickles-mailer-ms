@@ -16,6 +16,7 @@ import {
 import { MAIL_TRAIL_TABLE_NAME, publishMailRetryEvent } from '../modules/mailer-service';
 import { delay } from '../modules/mailer-service/src/helpers/generic/utils';
 import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
+import { RETRY_DELIVERY_DELAY_MS } from '../modules/mailer-service/src/helpers/generic/constants';
 
 dotEnv.config();
 
@@ -49,17 +50,20 @@ export const main = async (
 const processBody = async (body: string) => {
     const parsedBody = JSON.parse(body);
     const detail = parsedBody.detail;
+    const id = uuidv4();
 
-    if (!(await persistData(detail))) {
+    if (!(await persistData(detail, id))) {
         throw new Error('Process body operation failed');
     }
 
-    await delay(5000); // arbitrary delay before retrying
+    await delay(RETRY_DELIVERY_DELAY_MS); // arbitrary delay before retrying
     const mailRetryReceipt = await publishMailRetryEvent(
         {
+            id,
             emailTransactionId: detail.emailTransactionId,
             uploadTransactionId: detail.uploadTransactionId,
             emailData: detail.emailData,
+            creationDate: new Date()
         },
         new EventBridgeClient({}) // override with default
     );
@@ -74,11 +78,12 @@ const processBody = async (body: string) => {
     };
 };
 
-const persistData = async (data: IMailSubmitted): Promise<boolean> => {
+const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> => {
     const rowData: IMailTrailEntity = {
         ...data,
-        id: uuidv4(),
-        attemptNumber: 0,
+        id,
+        // id: uuidv4(),
+        attemptNumber: 1,
     };
 
     try {

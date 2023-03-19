@@ -100,6 +100,7 @@ app.post(
             if (emailReceipt.success) {
                 const publishMailSuccessfulReceipt =
                     await publishMailSentSuccessfulEvent({
+                        id: uuidv4(),
                         emailTransactionId: emailReceipt.transactionId,
                         uploadTransactionId: uploadToS3Receipt.transactionId,
                         successfulDelivery: true,
@@ -113,6 +114,7 @@ app.post(
 
             // 3b. If email delivery failure, publish mail sent failure event
             const publishMailFailedReceipt = await publishMailSentFailedEvent({
+                id: uuidv4(),
                 emailTransactionId: emailReceipt.transactionId,
                 uploadTransactionId: uploadToS3Receipt.transactionId,
                 successfulDelivery: false,

@@ -24,3 +24,7 @@ export const EVENT_SENT_RETRIES_QUEUE_NAME = 'EmailRetriesQueue';
 
 // DynamoDB related
 export const MAIL_TRAIL_TABLE_NAME = 'MailTrail';
+
+// Others
+export const ALLOWABLE_RETRIES = 3;
+export const RETRY_DELIVERY_DELAY_MS = 5000;

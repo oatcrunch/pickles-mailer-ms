@@ -1,16 +1,16 @@
 export interface IMail {
+    id: string;
     emailTransactionId: string;
     emailData: any;
     uploadTransactionId?: string;
+    creationDate: Date;
 }
 
 export interface IMailSubmitted extends IMail {
     successfulDelivery: boolean;
-    creationDate: Date;
 }
 
 export interface IMailTrailEntity extends IMailSubmitted {
-    id: string;
     attemptNumber?: number;
     attemptTimeStamp?: Date;
 }

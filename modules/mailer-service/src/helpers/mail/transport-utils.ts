@@ -50,7 +50,7 @@ export const sendEmail = async (
     try {
         const emailTransporter = await createTransporter(config);
         const ret = await emailTransporter.sendMail(options);
-        console.log('Response from sending email:', ret);   // important for troubleshooting
+        console.log('Response from sending email:', ret); // important for troubleshooting
         const messageId = ret.messageId;
 
         const result: IEmailTransaction = {

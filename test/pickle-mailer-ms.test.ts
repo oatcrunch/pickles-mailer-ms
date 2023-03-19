@@ -1,16 +1,29 @@
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as PickleMailerMs from '../lib/pickle-mailer-ms-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as PickleMailerMs from '../lib/pickle-mailer-ms-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/pickle-mailer-ms-stack.ts
-test('SQS Queue Created', () => {
-    //   const app = new cdk.App();
-    //     // WHEN
-    //   const stack = new PickleMailerMs.PickleMailerMsStack(app, 'MyTestStack');
-    //     // THEN
-    //   const template = Template.fromStack(stack);
-    //   template.hasResourceProperties('AWS::SQS::Queue', {
-    //     VisibilityTimeout: 300
-    //   });
+describe('PickleMAilerMsTest', () => {
+    const app = new cdk.App();
+    const stack = new PickleMailerMs.PickleMailerMsStack(app, 'MyTestStack');
+    const template = Template.fromStack(stack);
+
+    test('DynamoDB Created', () => {
+        template.hasResource('AWS::DynamoDB::Table', {});
+    });
+
+    test('SQS Queue Created', () => {
+        template.hasResource('AWS::SQS::Queue', {});
+    });
+
+    test('AWS Lambda Created', () => {
+        template.hasResource('AWS::Lambda::Function', {});
+    });
+
+    test('S3 Bucket Created', () => {
+        template.hasResource('AWS::S3::Bucket', {});
+    });
+
+    test('Event Bud Created', () => {
+        template.hasResource('AWS::Events::EventBus', {});
+    });
 });

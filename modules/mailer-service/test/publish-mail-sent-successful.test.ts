@@ -7,7 +7,7 @@ import {
     ServiceOutputTypes,
 } from '@aws-sdk/client-eventbridge';
 import { MiddlewareStack } from '@aws-sdk/types';
-import { IMail, IMailSubmitted } from '../src/entities/mail';
+import { IMailSubmitted } from '../src/entities/mail';
 import { publishMailSentSuccessfulEvent } from '../src/helpers/event/publish-mail-sent-successful';
 
 const date = new Date();

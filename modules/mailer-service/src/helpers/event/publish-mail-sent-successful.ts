@@ -37,7 +37,7 @@ export const publishMailSentSuccessfulEvent = async (
             client = ebClient;
         }
 
-        const ret = await ebClient.send(new PutEventsCommand(params));
+        const ret = await client.send(new PutEventsCommand(params));
         console.log('Success, event sent: ', ret);
         const requestId = ret['$metadata'].requestId;
 

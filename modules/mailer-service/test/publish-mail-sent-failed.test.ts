@@ -64,7 +64,7 @@ describe('publishMailSentFailedEvent', () => {
         jest.clearAllMocks();
     });
 
-    it.skip('should publish a mail sent failed event with correct parameters', async () => {
+    it('should publish a mail sent failed event with correct parameters', async () => {
         // Call the function with mocked input and client
         const result = await publishMailSentFailedEvent(
             mockedMail,

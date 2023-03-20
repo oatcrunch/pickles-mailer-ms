@@ -154,6 +154,7 @@ request(options, function (error, response) {
   console.log(response.body);
 });
 ```
+Note: NPM package for `request` is needed for the above JS code to work.
 
 ## Testing the Application
 

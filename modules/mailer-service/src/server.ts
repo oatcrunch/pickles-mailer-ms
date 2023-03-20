@@ -10,6 +10,7 @@ import { publishMailSentFailedEvent } from './helpers/event/publish-mail-sent-fa
 import { createAttachmentsObj } from './helpers/mail/attachment-utils';
 import { IEmailDeliveryOAuth2Config } from './models/credentials';
 import { sendEmail } from './helpers/mail/transport-utils';
+import { IHttpResponse } from './models/http';
 
 dotEnv.config();
 
@@ -38,16 +39,30 @@ const serverId = uuidv4();
 
 // Health check endpoint
 app.get('/', (req: Request, res: Response) => {
-    res.send(`Health check endpoint reachable from ${serverId}!`);
+    const response: IHttpResponse = {
+        instanceId: serverId,
+        message: `Health check endpoint reachable!`,
+    };
+    res.status(200).send(response);
 });
 
 // HTTP POST with body payload test endpoint
 app.post('/test', async (req: Request, res: Response) => {
     try {
         console.log(req.body);
-        res.status(200).send(`You have just sent ${JSON.stringify(req.body)}`);
+        const response: IHttpResponse = {
+            instanceId: serverId,
+            message: `You have just sent a req.body with HTTP POST`,
+            body: req.body,
+        };
+        res.status(200).send(response);
     } catch (err) {
-        res.status(500).send(JSON.stringify(err));
+        const response: IHttpResponse = {
+            instanceId: serverId,
+            message: 'Error sending POST with req.body',
+            body: err.message,
+        };
+        res.status(500).send(response);
     }
 });
 
@@ -73,7 +88,18 @@ app.post(
                 throw Error('Body.json object is mandatory');
             }
 
-            const parsedJson = JSON.parse(req.body.json);
+            let parsedJson = {};
+
+            try {
+                parsedJson = JSON.parse(req.body.json);
+            } catch (err) {
+                // Doing this to filter low level stack errors to client
+                // Only allow low level stack errors to be logged internally
+                console.log(
+                    `Error thrown when parsing using JSON parser: ${err?.message}`
+                );
+                throw Error('req.body.json is not in the correct JSON format');
+            }
 
             // Ensure integrity of the email data before processing happens
             if (!validateEmailDto(parsedJson)) {
@@ -108,7 +134,13 @@ app.post(
                         emailData: parsedJson,
                     });
 
-                res.status(201).send(publishMailSuccessfulReceipt);
+                const response: IHttpResponse = {
+                    instanceId: serverId,
+                    message: 'Received publish mail sent success event receipt',
+                    body: publishMailSuccessfulReceipt,
+                };
+                // To indicate that email send request is created
+                res.status(201).send(response);
                 return;
             }
 
@@ -121,15 +153,30 @@ app.post(
                 creationDate: new Date(),
                 emailData: parsedJson,
             });
+            const response: IHttpResponse = {
+                instanceId: serverId,
+                message: 'Received publish mail sent failed event receipt',
+                body: publishMailFailedReceipt,
+            };
 
-            res.status(200).send(publishMailFailedReceipt);
-        } catch (err: any) {
+            // To indicate a receipt even that the mail was not successfully delivered
+            res.status(200).send(response);
+        } catch (err) {
             console.error(err);
-            res.status(500).send(err?.message);
+            const response: IHttpResponse = {
+                instanceId: serverId,
+                message: 'Exception thrown from server',
+                body: err?.message,
+            };
+            // Catch up bucket, if anything goes wrong, just return the error message back to client
+            res.status(500).send(response);
         }
     }
 );
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+    // The server instance ID is to allow easier tracking if there is a need to troubleshoot
+    console.log(
+        `Server of instance id "${serverId}" listening on port ${PORT}`
+    );
 });

@@ -10,6 +10,7 @@ import { publishMailSentFailedEvent } from './helpers/event/publish-mail-sent-fa
 import { createAttachmentsObj } from './helpers/mail/attachment-utils';
 import { IEmailDeliveryOAuth2Config } from './models/credentials';
 import { sendEmail } from './helpers/mail/transport-utils';
+import { IHttpResponse } from './models/http';
 
 dotEnv.config();
 
@@ -38,16 +39,44 @@ const serverId = uuidv4();
 
 // Health check endpoint
 app.get('/', (req: Request, res: Response) => {
-    res.send(`Health check endpoint reachable from ${serverId}!`);
+    // res.send(`Health check endpoint reachable from ${serverId}!`);
+    const response: IHttpResponse = {
+        instanceId: serverId,
+        message: `Health check endpoint reachable!`,
+        // response: {
+        //     code: 200,
+        //     message: HttpStatusCodeMessage.HTTP_200,
+        // },
+    };
+    res.status(200).send(JSON.stringify(response));
 });
 
 // HTTP POST with body payload test endpoint
 app.post('/test', async (req: Request, res: Response) => {
     try {
         console.log(req.body);
-        res.status(200).send(`You have just sent ${JSON.stringify(req.body)}`);
+        // res.status(200).send(`You have just sent ${JSON.stringify(req.body)}`);
+        const response: IHttpResponse = {
+            instanceId: serverId,
+            message: `You have just sent a req.body with HTTP POST`,
+            body: req.body,
+            // response: {
+            //     code: 200,
+            //     message: HttpStatusCodeMessage.HTTP_200,
+            // },
+        };
+        res.status(200).send(JSON.stringify(response));
     } catch (err) {
-        res.status(500).send(JSON.stringify(err));
+        const response: IHttpResponse = {
+            instanceId: serverId,
+            message: 'Error sending POST with req.body',
+            body: err.message,
+            // response: {
+            //     code: 500,
+            //     message: HttpStatusCodeMessage.HTTP_500,
+            // },
+        };
+        res.status(500).send(response);
     }
 });
 
@@ -108,7 +137,16 @@ app.post(
                         emailData: parsedJson,
                     });
 
-                res.status(201).send(publishMailSuccessfulReceipt);
+                const response: IHttpResponse = {
+                    instanceId: serverId,
+                    message: 'Received publish mail sent success event receipt',
+                    body: publishMailSuccessfulReceipt,
+                    // response: {
+                    //     code: 201,
+                    //     message: HttpStatusCodeMessage.HTTP_201,
+                    // },
+                };
+                res.status(201).send(response);
                 return;
             }
 
@@ -121,10 +159,28 @@ app.post(
                 creationDate: new Date(),
                 emailData: parsedJson,
             });
+            const response: IHttpResponse = {
+                instanceId: serverId,
+                message: 'Received publish mail sent failed event receipt',
+                body: publishMailFailedReceipt,
+                // response: {
+                //     code: 200,
+                //     message: HttpStatusCodeMessage.HTTP_200,
+                // },
+            };
 
-            res.status(200).send(publishMailFailedReceipt);
-        } catch (err: any) {
+            res.status(200).send(response);
+        } catch (err) {
             console.error(err);
+            const response: IHttpResponse = {
+                instanceId: serverId,
+                message: 'Received publish mail sent failed event receipt',
+                body: err?.message,
+                // response: {
+                //     code: 500,
+                //     message: HttpStatusCodeMessage.HTTP_500,
+                // },
+            };
             res.status(500).send(err?.message);
         }
     }

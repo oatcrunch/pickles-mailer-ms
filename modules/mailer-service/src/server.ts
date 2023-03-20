@@ -1,6 +1,9 @@
 import express from 'express';
 import dotEnv from 'dotenv';
 import multer from 'multer';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import YAML from 'yaml';
 import { v4 as uuidv4 } from 'uuid';
 import { Request, Response } from 'express';
 import { uploadS3 } from './helpers/upload/upload-utils';
@@ -36,6 +39,13 @@ app.use(express.json());
 
 // Server instance unique ID
 const serverId = uuidv4();
+
+// Specs for Swagger
+const file = fs.readFileSync('./swagger.yaml', 'utf8');
+const swaggerDocument = YAML.parse(file);
+
+// Swagger endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Health check endpoint
 app.get('/', (req: Request, res: Response) => {

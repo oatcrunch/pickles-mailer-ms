@@ -1,0 +1,92 @@
+swagger: '2.0'
+info:
+  version: '0.1.5'
+  title: Email API
+  description: Highly available email API for sending emails with text, html and file attachments
+basePath: '/'
+schemes:
+  - http
+consumes:
+  - multipart/form-data
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      summary: Health Check
+      description: Check if the server is running
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+  /test:
+    post:
+      summary: Test Endpoint
+      description: Endpoint for testing HTTP POST with body payload
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: payload
+          in: body
+          required: true
+          schema:
+            type: object
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+  /email:
+    post:
+      summary: Send Email
+      description: Endpoint for sending emails with optionally file attachments
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - name: json
+          in: formData
+          type: string
+          required: true
+          description: JSON string with email data
+        - name: file
+          in: formData
+          type: file
+          required: false
+          description: Attachment file(s) to send with email
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/IHttpResponse'
+definitions:
+  IHttpResponse:
+    type: object
+    properties:
+      instanceId:
+        type: string
+        description: Unique server ID
+      message:
+        type: string
+        description: Description of response
+      body:
+        type: object
+        description: Body of the response
+       

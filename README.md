@@ -95,6 +95,67 @@ _Figure 2: AWS Solutions Architecture Diagram_
 6. Note that if any of the operation above failed for some reason, feel free to re-run the .bat file as it should not have any impact on the final outcome. Also, the error thrown related to the ingress-nginx-controller will not affect the system (ignore it for now).
 7. After completed testing, please run `destroy-cluster.bat` and also `destroy-persistence-stack.bat` (press `y` and enter when prompted) to wipe out all resources created on cloud. Take note that these 2 operations can be executed concurrently on separate terminals (do make sure that Docker Desktop with Docker and Kubernetes enabled is still running).
 
+## Pre-test Preparations
+
+### JSON body (mandatory)
+
+1. The body of `'Content-Type': 'application/json'` to include:
+-   `to`: to indicate recipients' email address (comma separated if more than 1).
+-   `subject`: to indicate the title of the email.
+-   `text`: contains the main body of the email.
+2. For example:
+```
+{
+    "to": "pickles-test@outlook.com",
+    "subject": "Hi from autosender",
+    "text": "I am sending this because I want to test my email API."
+}
+```
+3. The JSON itself should be the value for the key `json` when POST-ing the `/email` endpoint.
+
+### File attachments (optional)
+
+1. Each file attachment is the value for the key `file` when POST-ing `/email` endpoint.
+2. Any file format is supported.
+
+### Sample Javascript code to test the endpoint
+
+```
+var port = 3000;
+var host = 'http://localhost';
+var request = require('request');
+var fs = require('fs');
+var options = {
+  'method': 'POST',
+  'url': `${host}:${port}/email`,
+  'headers': {
+    'Content-Type': 'application/json'
+  },
+  formData: {
+    'file': {
+      'value': fs.createReadStream('./files/Picture1.png'),
+      'options': {
+        'filename': './files/Picture1.png',
+        'contentType': null
+      }
+    },
+    'file': {
+      'value': fs.createReadStream('./files/some random text file.txt'),
+      'options': {
+        'filename': './files/some random text file.txt',
+        'contentType': null
+      }
+    },
+    'json': '{\n    "to": "pickles-test@outlook.com",\n    "subject": "Hi from autosender",\n    "text": "I am sending this because I want to test my email API."\n}'
+  }
+};
+request(options, function (error, response) {
+  if (error) throw new Error(error);
+  console.log(response.body);
+});
+```
+Note: NPM package for `request` is needed for the above JS code to work.
+
 ## Testing the Application
 
 1. If you are running on DEVELOPMENT mode, your URL should be http://localhost:3000.

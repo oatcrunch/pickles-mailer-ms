@@ -122,32 +122,34 @@ _Figure 2: AWS Solutions Architecture Diagram_
 
 ```
 var port = 3000;
-var host = 'http://localhost';
-var request = require('request');
-var fs = require('fs');
+var host = "http://localhost";
+var request = require("request");
+var fs = require("fs");
 var options = {
-  'method': 'POST',
-  'url': `${host}:${port}/email`,
-  'headers': {
-    'Content-Type': 'application/json'
+  method: "POST",
+  url: `${host}:${port}/email`,
+  headers: {
+    "Content-Type": "application/json",
   },
   formData: {
-    'file': {
-      'value': fs.createReadStream('./files/Picture1.png'),
-      'options': {
-        'filename': './files/Picture1.png',
-        'contentType': null
-      }
-    },
-    'file': {
-      'value': fs.createReadStream('./files/some random text file.txt'),
-      'options': {
-        'filename': './files/some random text file.txt',
-        'contentType': null
-      }
-    },
-    'json': '{\n    "to": "pickles-test@outlook.com",\n    "subject": "Hi from autosender",\n    "text": "I am sending this because I want to test my email API."\n}'
-  }
+    file: [
+      {
+        value: fs.createReadStream("./files/Picture1.png"),
+        options: {
+          filename: "./files/Picture1.png",
+          contentType: null,
+        },
+      },
+      {
+        value: fs.createReadStream("./files/some random text file.txt"),
+        options: {
+          filename: "./files/some random text file.txt",
+          contentType: null,
+        },
+      },
+    ],
+    json: '{\n    "to": "pickles-test@outlook.com",\n    "subject": "Hi from autosender",\n    "text": "I am sending this because I want to test my email API."\n}',
+  },
 };
 request(options, function (error, response) {
   if (error) throw new Error(error);
@@ -164,6 +166,8 @@ Note: NPM package for `request` is needed for the above JS code to work.
 
 Click on below image icon to view the demo video on how to run the test:
 [![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)
+
+Alternatively, you can also open up Swagger doc by appending `/api-docs` at the base URL on your browser for testing.
 
 ## Discussion and Assumptions Made
 

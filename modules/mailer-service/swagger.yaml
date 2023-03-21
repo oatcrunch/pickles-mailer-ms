@@ -61,7 +61,7 @@ paths:
           in: formData
           type: string
           required: true
-          description: JSON string with email data
+          description: JSON string with email data (refer Readme for JSON body schema)
         - name: file
           in: formData
           type: file

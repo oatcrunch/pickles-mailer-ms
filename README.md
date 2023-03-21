@@ -167,6 +167,8 @@ Note: NPM package for `request` is needed for the above JS code to work.
 Click on below image icon to view the demo video on how to run the test:
 [![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)
 
+Alternatively, you can also open up Swagger doc by appending `/api-docs` at the base URL on your browser for testing.
+
 ## Discussion and Assumptions Made
 
 1. This proof of concept is based on assumption that the cloud SMTP mail server is highly available, but without much info on the performance metric.

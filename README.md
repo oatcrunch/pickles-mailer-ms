@@ -156,7 +156,7 @@ request(options, function (error, response) {
   console.log(response.body);
 });
 ```
-Note: NPM package for `request` is needed for the above JS code to work.
+Note: NPM package for `request` is needed for the above JS code to work. Please modify the port, host, JSON content and also the file path(s) if any.
 
 ## Testing the Application
 
@@ -167,7 +167,8 @@ Note: NPM package for `request` is needed for the above JS code to work.
 Click on below image icon to view the demo video on how to run the test:
 [![Running on PRODUCTION mode demo](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Demo+prod+preview.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/pickles+emal+api+demo.mp4)
 
-Alternatively, you can also open up Swagger doc by appending `/api-docs` at the base URL on your browser for testing.
+Alternatively, you can also open up Swagger doc by appending `/api-docs` at the base URL on your browser for testing:
+[![Testing using Swagger](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Swagger+Demo+Video+Snapshot.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/How+to+use+Swagger+doc+to+invoke+Email+API+endpoint.mp4)
 
 ## Discussion and Assumptions Made
 

@@ -43,6 +43,10 @@ _Figure 2: AWS Solutions Architecture Diagram_
 
 1. Make sure you have an AWS user account set up and configured with administrative privilege. Refer **[this video](https://dev.to/aws-builders/creating-your-first-iam-admin-user-and-user-group-in-your-aws-account-machine-learning-part-1-3cne)** for more details.
 2. Refer to **[this video](https://www.youtube.com/watch?v=Rp-A84oh4G8)**, to configure your local machine so that your machine has the privilege for cloud infra deployment later on.
+3. Upon successful account creation, and for the sake of this POC, just set the default region name of the admin account to `ap-southeast-1` for consistency by running `aws configure` command on your terminal. 
+4. Press enter twice to skip AWS Access Key ID and AWS Secret Access Key.
+5. When prompted for `Default Region Name`, enter `ap-southeast-1` and press enter twice again to complete set up. Refer snapshot below for example:
+[![Configure AWS Default Region Name](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/aws+configure+default+env.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/aws+configure+default+env.PNG)
 
 ### Delegate AWS account set up (for S3 uploads and also invoking Event Bridge from an application):
 
@@ -63,6 +67,7 @@ _Figure 2: AWS Solutions Architecture Diagram_
 1. Run `git clone git@github.com:oatcrunch/pickles-mailer-ms.git` or manually download the zipped version of the project to any desired location on your local machine.
 2. Open the cloned project using your favourite IDE like Visual Studio Code.
 3. Open up a terminal at your project root directory and run `npm install` (it will install node packages in the root as well as in the subdirectory at modules/mailer-service).
+4. Open up `Docker Desktop` and when it is up (with Docker running), then run `npm run bootstrap` next to install CDK Toolkit into your AWS account (note that this step is only needed to do once).
 
 ## Running on DEVELOPMENT mode
 

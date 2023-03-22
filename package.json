@@ -1,6 +1,6 @@
 {
     "name": "pickle-mailer-ms",
-    "version": "0.1.0",
+    "version": "0.1.7",
     "bin": {
         "pickle-mailer-ms": "bin/pickle-mailer-ms.js"
     },
@@ -8,6 +8,7 @@
         "build": "tsc",
         "watch": "tsc -w",
         "test": "jest --detectOpenHandles",
+        "bootstrap": "cdk bootstrap",
         "synth": "cdk synth",
         "deploy": "cdk deploy",
         "destroy": "cdk destroy",

@@ -57,7 +57,7 @@ export const sendEmail = async (
         const result: IEmailTransaction = {
             transactionId: messageId,
             transactionDateTime: new Date(),
-            success: true,  // defaults to be successful, validate in the next line
+            success: true, // defaults to be successful, validate in the next line
         };
 
         // Find out if any email address that is not getting the email
@@ -68,7 +68,7 @@ export const sendEmail = async (
         // Split results into 2 buckets ie delivered and undelivered
         for (const recipient of recipientsArr) {
             const trimmedRecipient = recipient.trim();
-            if (envelopTo.some(q => trimmedRecipient === q.trim())) {
+            if (envelopTo.some((q) => trimmedRecipient === q.trim())) {
                 emailsInEnv.push(trimmedRecipient);
             } else {
                 emailsNotInEnv.push(trimmedRecipient);
@@ -77,7 +77,7 @@ export const sendEmail = async (
 
         result.deliveredEmailAddresses = emailsInEnv;
         result.undeliveredEmailAddresses = emailsNotInEnv;
-        result.success = !emailsNotInEnv.length;    // failed if we have undelivered email addresses
+        result.success = !emailsNotInEnv.length; // failed if we have undelivered email addresses
 
         return result;
     } catch (error) {

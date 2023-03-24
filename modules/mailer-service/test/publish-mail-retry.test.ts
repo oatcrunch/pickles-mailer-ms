@@ -19,7 +19,7 @@ const mockedMail: IMailSubmitted = {
     creationDate: new Date(),
     undeliveredEmailAddresses: [],
     deliveredEmailAddresses: ['john.doe@somemail.com'],
-    successfulDelivery: true
+    successfulDelivery: true,
 };
 
 class EventBridgeClientMockOk implements EventBridgeClient {

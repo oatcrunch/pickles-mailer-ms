@@ -143,8 +143,10 @@ app.post(
                         successfulDelivery: true,
                         creationDate: new Date(),
                         emailData: parsedJson,
-                        deliveredEmailAddresses: emailReceipt.deliveredEmailAddresses,
-                        undeliveredEmailAddresses: emailReceipt.undeliveredEmailAddresses
+                        deliveredEmailAddresses:
+                            emailReceipt.deliveredEmailAddresses,
+                        undeliveredEmailAddresses:
+                            emailReceipt.undeliveredEmailAddresses,
                     });
 
                 const response: IHttpResponse = {
@@ -166,7 +168,8 @@ app.post(
                 creationDate: new Date(),
                 emailData: parsedJson,
                 deliveredEmailAddresses: emailReceipt.deliveredEmailAddresses,
-                undeliveredEmailAddresses: emailReceipt.undeliveredEmailAddresses
+                undeliveredEmailAddresses:
+                    emailReceipt.undeliveredEmailAddresses,
             });
             const response: IHttpResponse = {
                 instanceId: serverId,

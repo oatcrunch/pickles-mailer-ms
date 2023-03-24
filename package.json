@@ -1,6 +1,6 @@
 {
     "name": "pickle-mailer-ms",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "bin": {
         "pickle-mailer-ms": "bin/pickle-mailer-ms.js"
     },

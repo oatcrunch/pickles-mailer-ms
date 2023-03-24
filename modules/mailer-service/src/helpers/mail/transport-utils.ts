@@ -68,6 +68,10 @@ export const sendEmail = async (
         // Split results into 2 buckets ie delivered and undelivered
         for (const recipient of recipientsArr) {
             const trimmedRecipient = recipient.trim();
+            if (!trimmedRecipient.length) {
+                // Skip if found empty or white space(s)
+                continue;
+            }
             if (envelopTo.some((q) => trimmedRecipient === q.trim())) {
                 emailsInEnv.push(trimmedRecipient);
             } else {

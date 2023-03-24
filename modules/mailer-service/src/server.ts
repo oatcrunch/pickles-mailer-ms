@@ -160,6 +160,11 @@ app.post(
             }
 
             // 3b. If email delivery failure, publish mail sent failure event
+            if (!emailReceipt.undeliveredEmailAddresses.length) {
+                throw Error(
+                    'There is no email address found in the recipient list'
+                );
+            }
             const publishMailFailedReceipt = await publishMailSentFailedEvent({
                 id: uuidv4(),
                 emailTransactionId: emailReceipt.transactionId,

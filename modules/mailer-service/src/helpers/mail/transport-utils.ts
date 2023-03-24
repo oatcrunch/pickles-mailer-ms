@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { google } from 'googleapis';
 import { IEmailDeliveryOAuth2Config } from '../../models/credentials';
 import { IEmailTransaction } from '../../models/transaction';
+import { getRecipientsNotReceivedList } from './mail-utils';
 
 const OAuth2 = google.auth.OAuth2;
 
@@ -47,12 +48,15 @@ export const sendEmail = async (
     config: IEmailDeliveryOAuth2Config,
     options: Mail.Options
 ): Promise<IEmailTransaction> => {
+    // Find out if any email address that is not getting the email
+    // We would assume that "to" is always defined because we have done validation earlier
+    const allRecipientsList = options.to.toString().split(',');
     try {
         const emailTransporter = await createTransporter(config);
         const ret = await emailTransporter.sendMail(options);
         console.log('Response from sending email:', ret); // important for troubleshooting
         const messageId = ret.messageId;
-        const envelopTo = ret.envelope?.to || [];
+        const receivedRecipientsList = ret.envelope?.to || [];
 
         const result: IEmailTransaction = {
             transactionId: messageId,
@@ -60,28 +64,15 @@ export const sendEmail = async (
             success: true, // defaults to be successful, validate in the next line
         };
 
-        // Find out if any email address that is not getting the email
-        const recipientsArr = options.to.toString().split(',');
-        let emailsNotInEnv = [];
-        let emailsInEnv = [];
-
         // Split results into 2 buckets ie delivered and undelivered
-        for (const recipient of recipientsArr) {
-            const trimmedRecipient = recipient.trim();
-            if (!trimmedRecipient.length) {
-                // Skip if found empty or white space(s)
-                continue;
-            }
-            if (envelopTo.some((q) => trimmedRecipient === q.trim())) {
-                emailsInEnv.push(trimmedRecipient);
-            } else {
-                emailsNotInEnv.push(trimmedRecipient);
-            }
-        }
+        const recipientsNotReceivedList = getRecipientsNotReceivedList(
+            allRecipientsList,
+            receivedRecipientsList
+        );
 
-        result.deliveredEmailAddresses = emailsInEnv;
-        result.undeliveredEmailAddresses = emailsNotInEnv;
-        result.success = !emailsNotInEnv.length; // failed if we have undelivered email addresses
+        result.deliveredEmailAddresses = receivedRecipientsList;
+        result.undeliveredEmailAddresses = recipientsNotReceivedList;
+        result.success = !recipientsNotReceivedList.length; // failed if we have undelivered email addresses
 
         return result;
     } catch (error) {
@@ -91,7 +82,10 @@ export const sendEmail = async (
         transactionId: uuidv4(),
         success: false,
         // In the case of all unsuccessful event, re-assign "to" to undeliveredEmailAddresses
-        undeliveredEmailAddresses: options.to.toString().split(','),
+        undeliveredEmailAddresses: getRecipientsNotReceivedList(
+            allRecipientsList,
+            []
+        ),
         deliveredEmailAddresses: [],
     };
 };

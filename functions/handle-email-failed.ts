@@ -63,7 +63,10 @@ const processBody = async (body: string) => {
             emailTransactionId: detail.emailTransactionId,
             uploadTransactionId: detail.uploadTransactionId,
             emailData: detail.emailData,
-            creationDate: new Date()
+            creationDate: new Date(),
+            undeliveredEmailAddresses: detail.undeliveredEmailAddresses,
+            deliveredEmailAddresses: detail.deliveredEmailAddresses,
+            successfulDelivery: false
         },
         new EventBridgeClient({}) // override with default
     );
@@ -82,7 +85,6 @@ const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> =
     const rowData: IMailTrailEntity = {
         ...data,
         id,
-        // id: uuidv4(),
         attemptNumber: 1,
     };
 

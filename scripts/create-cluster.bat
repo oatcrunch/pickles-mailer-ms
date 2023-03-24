@@ -5,6 +5,7 @@ call eksctl create cluster ^
     --region ap-southeast-1 ^
     --nodegroup-name mailer-nodegroup ^
     --node-type t3.small ^
-    --nodes 2 ^
+    --nodes-min=2 ^
+    --nodes-max=4 ^
     --zones=ap-southeast-1a,ap-southeast-1b
 call aws eks update-kubeconfig --name mailer-cluster --region ap-southeast-1

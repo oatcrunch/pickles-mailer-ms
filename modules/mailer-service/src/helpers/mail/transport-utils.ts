@@ -52,24 +52,42 @@ export const sendEmail = async (
         const ret = await emailTransporter.sendMail(options);
         console.log('Response from sending email:', ret); // important for troubleshooting
         const messageId = ret.messageId;
+        const envelopTo = ret.envelope?.to || [];
 
         const result: IEmailTransaction = {
             transactionId: messageId,
             transactionDateTime: new Date(),
-            success: false,
+            success: true,  // defaults to be successful, validate in the next line
         };
 
-        if (messageId.includes('@localhost')) {
-            return {
-                ...result,
-                success: true,
-            };
+        // Find out if any email address that is not getting the email
+        const recipientsArr = options.to.toString().split(',');
+        let emailsNotInEnv = [];
+        let emailsInEnv = [];
+
+        // Split results into 2 buckets ie delivered and undelivered
+        for (const recipient of recipientsArr) {
+            const trimmedRecipient = recipient.trim();
+            if (envelopTo.some(q => trimmedRecipient === q.trim())) {
+                emailsInEnv.push(trimmedRecipient);
+            } else {
+                emailsNotInEnv.push(trimmedRecipient);
+            }
         }
+
+        result.deliveredEmailAddresses = emailsInEnv;
+        result.undeliveredEmailAddresses = emailsNotInEnv;
+        result.success = !emailsNotInEnv.length;    // failed if we have undelivered email addresses
+
+        return result;
     } catch (error) {
         console.error(error);
     }
     return {
         transactionId: uuidv4(),
         success: false,
+        // In the case of all unsuccessful event, re-assign "to" to undeliveredEmailAddresses
+        undeliveredEmailAddresses: options.to.toString().split(','),
+        deliveredEmailAddresses: [],
     };
 };

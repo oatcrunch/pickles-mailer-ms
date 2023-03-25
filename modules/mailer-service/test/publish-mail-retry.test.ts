@@ -7,16 +7,19 @@ import {
     ServiceOutputTypes,
 } from '@aws-sdk/client-eventbridge';
 import { MiddlewareStack } from '@aws-sdk/types';
-import { IMail } from '../src/entities/mail';
+import { IMailSubmitted } from '../src/entities/mail';
 import { publishMailRetryEvent } from '../src/helpers/event/publish-mail-retry';
 
 // Mocked payload for mail retry event
-const mockedMail: IMail = {
+const mockedMail: IMailSubmitted = {
     id: '222',
     emailTransactionId: '12345',
     emailData: {},
     uploadTransactionId: '54321',
     creationDate: new Date(),
+    undeliveredEmailAddresses: [],
+    deliveredEmailAddresses: ['john.doe@somemail.com'],
+    successfulDelivery: true,
 };
 
 class EventBridgeClientMockOk implements EventBridgeClient {

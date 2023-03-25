@@ -1,4 +1,5 @@
 import { createAttachmentsObj } from '../src/helpers/mail/attachment-utils';
+jest.mock('uuid', () => ({ v4: () => '123456789' }));
 
 describe('createAttachmentsObj', () => {
     const testFile = {
@@ -34,5 +35,26 @@ describe('createAttachmentsObj', () => {
         expect(result[1]).toHaveProperty('ext');
         expect(result[1]).toHaveProperty('content');
         expect(result[1]).toHaveProperty('mimetype');
+    });
+
+    it('should convert file object correctly', () => {
+        const content = Buffer.from('some data');
+        const result = createAttachmentsObj([
+            {
+                fieldname: 'file',
+                originalname: 'Some filename.pdf',
+                encoding: '7bit',
+                mimetype: 'application/pdf',
+                buffer: content,
+            },
+        ]);
+        expect(result.length).toBe(1);
+        expect(result[0]).toEqual({
+            filename: 'Some filename.pdf',
+            fileId: '123456789',
+            ext: 'pdf',
+            content,
+            mimetype: 'application/pdf',
+        });
     });
 });

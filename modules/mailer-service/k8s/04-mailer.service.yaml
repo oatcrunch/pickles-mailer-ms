@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: mailer-backend-service
   namespace: mailer
+  labels:
+    app: mailer-backend
 spec:
   type: LoadBalancer # use a LoadBalancer service for load balancing
   selector:

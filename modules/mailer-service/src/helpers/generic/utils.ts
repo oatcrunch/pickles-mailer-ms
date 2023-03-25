@@ -1,4 +1,4 @@
-// awaitable timeout in milliseconds
+// Awaitable timeout in milliseconds
 export const delay = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };

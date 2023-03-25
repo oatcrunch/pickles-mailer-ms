@@ -21,7 +21,7 @@ export const createAttachmentsObj = (files: any[]): IAttachmentInfo[] => {
 
                 const fileId = uuidv4();
                 const ext = <string>mime.extension(mimetype);
-                const filename = `${fileId}.${ext}`;
+                const filename = f.originalname;
 
                 results.push({
                     filename,

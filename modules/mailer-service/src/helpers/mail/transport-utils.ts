@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { google } from 'googleapis';
 import { IEmailDeliveryOAuth2Config } from '../../models/credentials';
 import { IEmailTransaction } from '../../models/transaction';
+import { getRecipientsNotReceivedList } from './mail-utils';
 
 const OAuth2 = google.auth.OAuth2;
 
@@ -47,29 +48,44 @@ export const sendEmail = async (
     config: IEmailDeliveryOAuth2Config,
     options: Mail.Options
 ): Promise<IEmailTransaction> => {
+    // Find out if any email address that is not getting the email
+    // We would assume that "to" is always defined because we have done validation earlier
+    const allRecipientsList = options.to.toString().split(',');
     try {
         const emailTransporter = await createTransporter(config);
         const ret = await emailTransporter.sendMail(options);
         console.log('Response from sending email:', ret); // important for troubleshooting
         const messageId = ret.messageId;
+        const receivedRecipientsList = ret.envelope?.to || [];
 
         const result: IEmailTransaction = {
             transactionId: messageId,
             transactionDateTime: new Date(),
-            success: false,
+            success: true, // defaults to be successful, validate in the next line
         };
 
-        if (messageId.includes('@localhost')) {
-            return {
-                ...result,
-                success: true,
-            };
-        }
+        // Split results into 2 buckets ie delivered and undelivered
+        const recipientsNotReceivedList = getRecipientsNotReceivedList(
+            allRecipientsList,
+            receivedRecipientsList
+        );
+
+        result.deliveredEmailAddresses = receivedRecipientsList;
+        result.undeliveredEmailAddresses = recipientsNotReceivedList;
+        result.success = !recipientsNotReceivedList.length; // failed if we have undelivered email addresses
+
+        return result;
     } catch (error) {
         console.error(error);
     }
     return {
         transactionId: uuidv4(),
         success: false,
+        // In the case of all unsuccessful event, re-assign "to" to undeliveredEmailAddresses
+        undeliveredEmailAddresses: getRecipientsNotReceivedList(
+            allRecipientsList,
+            []
+        ),
+        deliveredEmailAddresses: [],
     };
 };

@@ -79,6 +79,7 @@ const processBody = async (body: string) => {
     // 1. look for db rows based on email transaction id
     const id = detail.id;
     const emailTransactionId = detail.emailTransactionId;
+    const undeliveredEmailAddresses = detail.undeliveredEmailAddresses;
     const params = {
         TableName: MAIL_TRAIL_TABLE_NAME,
         KeyConditionExpression:
@@ -115,7 +116,9 @@ const processBody = async (body: string) => {
         };
     }
 
-    console.log(`Current attempt: ${attemptNumber} out of ${ALLOWABLE_RETRIES}`);
+    console.log(
+        `Current attempt: ${attemptNumber} out of ${ALLOWABLE_RETRIES}`
+    );
 
     // 3. if count is less than 3 and if upload transaction id is not empty, then list objects from s3 based on that id
     const listObjCmd = new ListObjectsV2Command({
@@ -147,6 +150,7 @@ const processBody = async (body: string) => {
         }
 
         // 4. with the email content and optionally attachments from s3, retry sending email
+        emailData.to = undeliveredEmailAddresses?.join(','); // Replace original recipients with undelivered recipients
         const receipt = await sendEmail(oAuth2Config, {
             ...emailData,
             fileInfos,
@@ -154,7 +158,16 @@ const processBody = async (body: string) => {
 
         // 5. Persist data after retry regardless success or failed
         const newId = uuidv4();
-        await persistData({...detail, successfulDelivery: receipt.success}, newId, attemptNumber + 1);
+        await persistData(
+            {
+                ...detail,
+                deliveredEmailAddresses: receipt.deliveredEmailAddresses || [],
+                undeliveredEmailAddresses: receipt.undeliveredEmailAddresses || [],
+                successfulDelivery: receipt.success
+            },
+            newId,
+            attemptNumber + 1
+        );
 
         // 5a. if email sent successful then and return saying succeeded
         if (receipt.success) {
@@ -175,7 +188,10 @@ const processBody = async (body: string) => {
                 emailTransactionId: detail.emailTransactionId,
                 uploadTransactionId: detail.uploadTransactionId,
                 emailData: detail.emailData,
-                creationDate: new Date()
+                creationDate: new Date(),
+                undeliveredEmailAddresses: detail.undeliveredEmailAddresses,
+                deliveredEmailAddresses: detail.deliveredEmailAddresses,
+                successfulDelivery: false
             },
             new EventBridgeClient({}) // override with default
         );
@@ -188,8 +204,6 @@ const processBody = async (body: string) => {
                 )} and retry receipt ${mailRetryReceipt}`,
             }),
         };
-
-
     } catch (err) {
         console.error('Error reading S3 objects', err);
     }
@@ -211,7 +225,7 @@ const persistData = async (
     const rowData: IMailTrailEntity = {
         ...data,
         id,
-        attemptNumber: currentAttempt,
+        attemptNumber: currentAttempt
     };
 
     try {

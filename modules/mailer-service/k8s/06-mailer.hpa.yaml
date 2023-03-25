@@ -3,6 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata: 
   name: mailer-backend-hpa 
   namespace: mailer
+  labels:
+    app: mailer-backend
 spec: 
   maxReplicas: 5 
   minReplicas: 2 

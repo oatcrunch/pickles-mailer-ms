@@ -5,7 +5,7 @@ import {
     PutEventsCommandInput,
 } from '@aws-sdk/client-eventbridge';
 import { ebClient } from './event-publisher';
-import { IMail } from '../../entities/mail';
+import { IMailSubmitted } from '../../entities/mail';
 import {
     EMAIL_EVENT_SOURCE_NAME,
     EVENT_BUS_NAME,
@@ -16,7 +16,7 @@ dotEnv.config();
 
 // To publish event for triggering mail retries
 export const publishMailRetryEvent = async (
-    payload: IMail,
+    payload: IMailSubmitted,
     client?: EventBridgeClient
 ): Promise<string> => {
     try {

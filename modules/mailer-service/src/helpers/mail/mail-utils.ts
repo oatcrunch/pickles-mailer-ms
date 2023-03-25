@@ -8,3 +8,24 @@ export const validateEmailDto = (obj: any): boolean => {
     }
     return false;
 };
+
+// Returns list of recipients whom did not receive the email
+export const getRecipientsNotReceivedList = (
+    allRecipientsList: string[],
+    receivedRecipientsList: string[]
+) => {
+    let recipientsNotReceivedList = [];
+    for (const recipient of allRecipientsList) {
+        const trimmedRecipient = recipient.trim();
+        if (!trimmedRecipient.length) {
+            // Skip if found empty or white space(s)
+            continue;
+        }
+        if (
+            !receivedRecipientsList.some((q) => trimmedRecipient === q.trim())
+        ) {
+            recipientsNotReceivedList.push(trimmedRecipient);
+        }
+    }
+    return recipientsNotReceivedList;
+};

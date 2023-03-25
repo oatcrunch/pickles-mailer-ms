@@ -8,9 +8,10 @@ export interface IMail {
 
 export interface IMailSubmitted extends IMail {
     successfulDelivery: boolean;
+    undeliveredEmailAddresses?: string[];
+    deliveredEmailAddresses?: string[];
 }
 
 export interface IMailTrailEntity extends IMailSubmitted {
     attemptNumber?: number;
-    attemptTimeStamp?: Date;
 }

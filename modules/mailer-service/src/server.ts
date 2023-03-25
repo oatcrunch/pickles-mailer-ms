@@ -14,6 +14,7 @@ import { createAttachmentsObj } from './helpers/mail/attachment-utils';
 import { IEmailDeliveryOAuth2Config } from './models/credentials';
 import { sendEmail } from './helpers/mail/transport-utils';
 import { IHttpResponse } from './models/http';
+import { IEmail } from './models/email';
 
 dotEnv.config();
 
@@ -98,7 +99,7 @@ app.post(
                 throw Error('Body.json object is mandatory');
             }
 
-            let parsedJson = {};
+            let parsedJson: IEmail = { to: '', subject: '', text: '' };
 
             try {
                 parsedJson = JSON.parse(req.body.json);
@@ -142,6 +143,10 @@ app.post(
                         successfulDelivery: true,
                         creationDate: new Date(),
                         emailData: parsedJson,
+                        deliveredEmailAddresses:
+                            emailReceipt.deliveredEmailAddresses,
+                        undeliveredEmailAddresses:
+                            emailReceipt.undeliveredEmailAddresses,
                     });
 
                 const response: IHttpResponse = {
@@ -155,6 +160,11 @@ app.post(
             }
 
             // 3b. If email delivery failure, publish mail sent failure event
+            if (!emailReceipt.undeliveredEmailAddresses.length) {
+                throw Error(
+                    'There is no email address found in the recipient list'
+                );
+            }
             const publishMailFailedReceipt = await publishMailSentFailedEvent({
                 id: uuidv4(),
                 emailTransactionId: emailReceipt.transactionId,
@@ -162,6 +172,9 @@ app.post(
                 successfulDelivery: false,
                 creationDate: new Date(),
                 emailData: parsedJson,
+                deliveredEmailAddresses: emailReceipt.deliveredEmailAddresses,
+                undeliveredEmailAddresses:
+                    emailReceipt.undeliveredEmailAddresses,
             });
             const response: IHttpResponse = {
                 instanceId: serverId,

@@ -175,6 +175,11 @@ Click on below image icon to view the demo video on how to run the test:
 Alternatively, you can also open up Swagger doc by appending `/api-docs` at the base URL on your browser for testing:
 [![Testing using Swagger](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/Swagger+Demo+Video+Snapshot.PNG)](https://mel-public-bucket.s3.ap-southeast-1.amazonaws.com/How+to+use+Swagger+doc+to+invoke+Email+API+endpoint.mp4)
 
+## Running Unit Tests
+
+1. Open up `Docker Desktop` and make sure Docker engine is running (indicator showing green).
+2. At project root directory, run `npm run test` and it will run unit tests using Jest library for the entire project.
+
 ## Discussion and Assumptions Made
 
 1. This proof of concept is based on assumption that the cloud SMTP mail server is highly available, but without much info on the performance metric.

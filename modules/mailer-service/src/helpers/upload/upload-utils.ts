@@ -35,7 +35,7 @@ export const uploadS3 = async (
             for (const f of files) {
                 const command = new PutObjectCommand({
                     Bucket: BUCKET_NAME,
-                    Key: `${transactId}/${f.fileId}.${f.ext}`,
+                    Key: `${transactId}/${f.filename}`,
                     Body: f.content,
                 });
                 const ret = await client.send(command);

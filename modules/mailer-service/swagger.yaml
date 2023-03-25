@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: '0.1.9'
+  version: '0.1.10'
   title: Email API
   description: Highly available email API for sending emails with text, html and file attachments
 basePath: '/'

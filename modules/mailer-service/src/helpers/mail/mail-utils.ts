@@ -9,6 +9,7 @@ export const validateEmailDto = (obj: any): boolean => {
     return false;
 };
 
+// Returns list of recipients whom did not receive the email
 export const getRecipientsNotReceivedList = (
     allRecipientsList: string[],
     receivedRecipientsList: string[]

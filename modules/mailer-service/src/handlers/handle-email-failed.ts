@@ -12,12 +12,15 @@ import { ddbClient } from '../data-access/db-client';
 import {
     IMailSubmitted,
     IMailTrailEntity,
-} from '../modules/mailer-service/src/entities/mail';
-import { MAIL_TRAIL_TABLE_NAME } from '../modules/mailer-service';
+} from '../entities/mail';
+import { delay } from '../helpers/generic/utils';
+import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
+import { MAIL_TRAIL_TABLE_NAME, RETRY_DELIVERY_DELAY_MS } from '../helpers/generic/constants';
+import { publishMailRetryEvent } from '../helpers/event/publish-mail-retry';
 
 dotEnv.config();
 
-// Saves successful email delivery to database
+// Saves email delivery failure to database and trigger event for retries
 export const main = async (
     event: APIGatewayEvent | SQSEvent,
     context: Context
@@ -28,10 +31,10 @@ export const main = async (
         if (sqsEvent && sqsEvent.Records && sqsEvent.Records.length) {
             return await processBody(<string>sqsEvent.Records[0].body);
         }
-        throw new Error(`Error handling email success with event: ${event}`);
+        throw new Error(`Error handling email failed with event: ${event}`);
     } catch (err: any) {
         console.error(
-            `Exception thrown at function handle-email-success.main: ${err}`
+            `Exception thrown at function handle-email-failed.main: ${err}`
         );
         return {
             statusCode: 500,
@@ -53,12 +56,27 @@ const processBody = async (body: string) => {
         throw new Error('Process body operation failed');
     }
 
+    await delay(RETRY_DELIVERY_DELAY_MS); // arbitrary delay before retrying
+    const mailRetryReceipt = await publishMailRetryEvent(
+        {
+            id,
+            emailTransactionId: detail.emailTransactionId,
+            uploadTransactionId: detail.uploadTransactionId,
+            emailData: detail.emailData,
+            creationDate: new Date(),
+            undeliveredEmailAddresses: detail.undeliveredEmailAddresses,
+            deliveredEmailAddresses: detail.deliveredEmailAddresses,
+            successfulDelivery: false
+        },
+        new EventBridgeClient({}) // override with default
+    );
+
     return {
         statusCode: 200,
         body: JSON.stringify({
-            message: `Handle email success function triggered with body: ${JSON.stringify(
+            message: `Handle email failed function triggered with body: ${JSON.stringify(
                 body
-            )}`,
+            )} with receipt ${mailRetryReceipt}`,
         }),
     };
 };
@@ -67,8 +85,7 @@ const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> =
     const rowData: IMailTrailEntity = {
         ...data,
         id,
-        // id: uuidv4(),
-        attemptNumber: 0,
+        attemptNumber: 1,
     };
 
     try {

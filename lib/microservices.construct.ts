@@ -57,7 +57,7 @@ export class PicklesMicroservicesConstruct extends Construct {
             timeout: cdk.Duration.seconds(HANDLE_EMAIL_SUCCESS_TIMEOUT),
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: 'main',
-            entry: join(__dirname, '/../functions/handle-email-success.ts'),
+            entry: join(__dirname, '/../modules/mailer-service/src/handlers/handle-email-success.ts'),
             bundling: {
                 minify: true,
                 externalModules: ['aws-sdk'],
@@ -79,7 +79,7 @@ export class PicklesMicroservicesConstruct extends Construct {
             timeout: cdk.Duration.seconds(HANDLE_EMAIL_FAILED_TIMEOUT),
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: 'main',
-            entry: join(__dirname, '/../functions/handle-email-failed.ts'),
+            entry: join(__dirname, '/../modules/mailer-service/src/handlers/handle-email-failed.ts'),
             bundling: {
                 minify: true,
                 externalModules: ['aws-sdk'],
@@ -108,7 +108,7 @@ export class PicklesMicroservicesConstruct extends Construct {
             timeout: cdk.Duration.seconds(HANDLE_EMAIL_RETRIES_TIMEOUT),
             runtime: lambda.Runtime.NODEJS_16_X,
             handler: 'main',
-            entry: join(__dirname, '/../functions/handle-email-retries.ts'),
+            entry: join(__dirname, '/../modules/mailer-service/src/handlers/handle-email-retries.ts'),
             bundling: {
                 minify: true,
                 externalModules: ['aws-sdk'],

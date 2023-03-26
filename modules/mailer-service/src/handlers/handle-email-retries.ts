@@ -7,6 +7,7 @@ import {
     ListObjectsV2Command,
     GetObjectCommand,
 } from '@aws-sdk/client-s3';
+import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
 import { v4 as uuidv4 } from 'uuid';
 import {
     APIGatewayEvent,
@@ -18,19 +19,18 @@ import { ddbClient } from '../data-access/db-client';
 import {
     IMailSubmitted,
     IMailTrailEntity,
-} from '../modules/mailer-service/src/entities/mail';
+} from '../entities/mail';
 import {
     ALLOWABLE_RETRIES,
     AWS_BUCKET_NAME,
     MAIL_TRAIL_TABLE_NAME,
     RETRY_DELIVERY_DELAY_MS,
-} from '../modules/mailer-service/src/helpers/generic/constants';
-import { IAttachmentInfo } from '../modules/mailer-service/src/models/email';
-import { sendEmail } from '../modules/mailer-service/src/helpers/mail/transport-utils';
-import { IEmailDeliveryOAuth2Config } from '../modules/mailer-service/src/models/credentials';
-import { delay } from '../modules/mailer-service/src/helpers/generic/utils';
-import { publishMailRetryEvent } from '../modules/mailer-service';
-import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
+} from '../helpers/generic/constants';
+import { IAttachmentInfo } from '../models/email';
+import { sendEmail } from '../helpers/mail/transport-utils';
+import { IEmailDeliveryOAuth2Config } from '../models/credentials';
+import { delay } from '../helpers/generic/utils';
+import { publishMailRetryEvent } from '../helpers/event/publish-mail-retry';
 
 // Generate OAuth2 config for email transporter
 const oAuth2Config: IEmailDeliveryOAuth2Config = {

@@ -9,13 +9,13 @@ import {
     SQSEvent,
 } from 'aws-lambda';
 import { ddbClient } from '../data-access/db-client';
-import {
-    IMailSubmitted,
-    IMailTrailEntity,
-} from '../entities/mail';
+import { IMailSubmitted, IMailTrailEntity } from '../entities/mail';
 import { delay } from '../helpers/generic/utils';
 import { EventBridgeClient } from '@aws-sdk/client-eventbridge';
-import { MAIL_TRAIL_TABLE_NAME, RETRY_DELIVERY_DELAY_MS } from '../helpers/generic/constants';
+import {
+    MAIL_TRAIL_TABLE_NAME,
+    RETRY_DELIVERY_DELAY_MS,
+} from '../helpers/generic/constants';
 import { publishMailRetryEvent } from '../helpers/event/publish-mail-retry';
 
 dotEnv.config();
@@ -66,7 +66,7 @@ const processBody = async (body: string) => {
             creationDate: new Date(),
             undeliveredEmailAddresses: detail.undeliveredEmailAddresses,
             deliveredEmailAddresses: detail.deliveredEmailAddresses,
-            successfulDelivery: false
+            successfulDelivery: false,
         },
         new EventBridgeClient({}) // override with default
     );
@@ -81,7 +81,10 @@ const processBody = async (body: string) => {
     };
 };
 
-const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> => {
+const persistData = async (
+    data: IMailSubmitted,
+    id: string
+): Promise<boolean> => {
     const rowData: IMailTrailEntity = {
         ...data,
         id,

@@ -9,10 +9,7 @@ import {
     SQSEvent,
 } from 'aws-lambda';
 import { ddbClient } from '../data-access/db-client';
-import {
-    IMailSubmitted,
-    IMailTrailEntity,
-} from '../entities/mail';
+import { IMailSubmitted, IMailTrailEntity } from '../entities/mail';
 import { MAIL_TRAIL_TABLE_NAME } from '../helpers/generic/constants';
 
 dotEnv.config();
@@ -63,7 +60,10 @@ const processBody = async (body: string) => {
     };
 };
 
-const persistData = async (data: IMailSubmitted, id: string): Promise<boolean> => {
+const persistData = async (
+    data: IMailSubmitted,
+    id: string
+): Promise<boolean> => {
     const rowData: IMailTrailEntity = {
         ...data,
         id,

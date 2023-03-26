@@ -16,10 +16,7 @@ import {
     SQSEvent,
 } from 'aws-lambda';
 import { ddbClient } from '../data-access/db-client';
-import {
-    IMailSubmitted,
-    IMailTrailEntity,
-} from '../entities/mail';
+import { IMailSubmitted, IMailTrailEntity } from '../entities/mail';
 import {
     ALLOWABLE_RETRIES,
     AWS_BUCKET_NAME,
@@ -162,8 +159,9 @@ const processBody = async (body: string) => {
             {
                 ...detail,
                 deliveredEmailAddresses: receipt.deliveredEmailAddresses || [],
-                undeliveredEmailAddresses: receipt.undeliveredEmailAddresses || [],
-                successfulDelivery: receipt.success
+                undeliveredEmailAddresses:
+                    receipt.undeliveredEmailAddresses || [],
+                successfulDelivery: receipt.success,
             },
             newId,
             attemptNumber + 1
@@ -191,7 +189,7 @@ const processBody = async (body: string) => {
                 creationDate: new Date(),
                 undeliveredEmailAddresses: detail.undeliveredEmailAddresses,
                 deliveredEmailAddresses: detail.deliveredEmailAddresses,
-                successfulDelivery: false
+                successfulDelivery: false,
             },
             new EventBridgeClient({}) // override with default
         );
@@ -225,7 +223,7 @@ const persistData = async (
     const rowData: IMailTrailEntity = {
         ...data,
         id,
-        attemptNumber: currentAttempt
+        attemptNumber: currentAttempt,
     };
 
     try {

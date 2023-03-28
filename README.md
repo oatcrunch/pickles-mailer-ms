@@ -33,11 +33,12 @@ _Figure 2: AWS Solutions Architecture Diagram_
 
 ### Tools to be installed on your machine:
 
--   **[NodeJS](https://nodejs.org/en)**
+-   **[NodeJS](https://nodejs.org/en)** (version `18.14.0` preferred)
 -   **[Docker & Kubernetes](https://www.docker.com/products/docker-desktop/)**
--   **[AWS CLI](https://aws.amazon.com/cli/)**
+-   **[AWS CLI](https://aws.amazon.com/cli/)** (version > `2.9` preferred)
 -   **[eksctl](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html)**
 -   **[AWS CDK](https://aws.amazon.com/cdk/)** (optional)
+-   Windows OS (preferred) or Linux (Ubuntu)
 
 ### Admin AWS account set up (mainly for deployment and creating delegate account):
 
@@ -179,6 +180,14 @@ Alternatively, you can also open up Swagger doc by appending `/api-docs` at the 
 
 1. Open up `Docker Desktop` and make sure Docker engine is running (indicator showing green).
 2. At project root directory, run `npm run test` and it will run unit tests using Jest library for the entire project.
+
+## Troubleshooting
+
+1. This guide is primarily written based on `Windows OS`. If you run on Linux (Ubuntu), you need to make sure that the `*.sh` files in `scripts` folder are given the executable permission. You need to run `chmod +x <filename>.sh` before executing the file in scripts directory (IMPORTANT: the steps written in this guide are not thoroughly tested on Ubuntu).
+2. The version of NodeJS used for this POC is `18.14.0`. For consistency, it is recommended to use this version.
+3. If any of the script (.sh or .bat) files cannot run successfully, consider break them down by manually running each command line on the terminal instead. For example in `deploy-k8s.sh`, run `kubectl create namespace mailer` followed by `kubectl apply -f ../modules/mailer-service/k8s` separately.
+4. Occasionally, connection to Docker might timeout/fail during deployment, feel free to retry running the script again.
+5. If there are issues with `npm run deploy`, update your AWS CLI to the latest version (for Linux, tested on v2.11.6).
 
 ## Discussion and Assumptions Made
 
